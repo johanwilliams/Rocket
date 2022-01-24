@@ -15,7 +15,7 @@ public class MyNetworkManager : NetworkManager
     public override void OnServerReady(NetworkConnection conn)
     {
         base.OnServerReady(conn);
-        Debug.Log("A client is ready");
+        Debug.Log($"Client {conn.connectionId} is ready");
     }
 
     /// <summary>
@@ -26,7 +26,7 @@ public class MyNetworkManager : NetworkManager
     public override void OnServerDisconnect(NetworkConnection conn)
     {        
         base.OnServerDisconnect(conn);
-        Debug.Log("Client disconnected");
+        Debug.Log($"Client {conn.connectionId} disconnected");
     }
 
     #endregion
