@@ -9,49 +9,73 @@ public class Player : NetworkBehaviour
     [SyncVar(hook = nameof(OnHolaCountChanged))]
     int holaCount = 0;
 
-    public Rigidbody rigidbody3d;
+    public Rigidbody rb;
 
-    [SerializeField]
-    private float force = 0.1f;
+    [SerializeField] private float thrustForce = 40.0f;
+    [SerializeField] private float rotationSpeed = 3f;
+    [SerializeField] private float maxVelocity = 3f;    
+
+    private float xAxis;
+    private float yAxis;    
+
+    #region MonoBehaviour api
 
     void OnValidate()
     {
-        rigidbody3d = GetComponent<Rigidbody>();
-        rigidbody3d.isKinematic = true;
+        rb = GetComponent<Rigidbody>();
+        //rb.isKinematic = true;
     }
-
-    public override void OnStartServer()
-    {
-        rigidbody3d.isKinematic = false;
-    }
-
-    void HandleMovement()
-    {
-        if (isLocalPlayer)
-        {
-            float moveHorizontal = Input.GetAxis("Horizontal");
-            float moveVertical = Input.GetAxis("Vertical");
-            //Vector3 movement = new Vector3(moveHorizontal * 0.1f, moveVertical * 0.1f, 0);
-            //transform.position = transform.position + movement;
-
-            rigidbody3d.AddForce(Vector3.up * force * moveVertical);
-        }
-    }
-
-    
 
     private void Update()
     {
-        HandleMovement();
+        // Update input
+        xAxis = Input.GetAxis("Horizontal");
+        yAxis = Mathf.Max(0f, Input.GetAxis("Vertical"));   // We don't want the rocket to be able to back up
 
         if (isLocalPlayer && Input.GetKeyDown(KeyCode.X))
         {
             Debug.Log("Sending Hola to the server");
             Hola();
-        }
+        }        
 
-       
+
+    }    
+
+    private void FixedUpdate()
+    {
+        if (isLocalPlayer)
+        {
+            ThrustForward(yAxis * thrustForce);
+            Rotate(xAxis * -rotationSpeed);
+        }
     }
+
+    #endregion
+
+    #region NetworkBehaviour api    
+
+    public override void OnStartServer()
+    {
+        //rb.isKinematic = false;
+    }
+
+    #endregion
+
+    #region Player movement
+
+    private void ThrustForward(float amount)
+    {
+        rb.AddForce(rb.transform.up * amount);        
+    }
+
+    private void Rotate(float amount)
+    {    
+        rb.AddTorque(transform.forward * amount);
+    }
+
+    #endregion
+
+    #region Data syncronization test
 
     [Command]
     void Hola()
@@ -77,4 +101,6 @@ public class Player : NetworkBehaviour
     {
         Debug.Log($"Hola count changed from {oldCount} to {newCount}");
     }
+
+    #endregion
 }
