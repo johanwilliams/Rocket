@@ -9,18 +9,8 @@ public class Health : NetworkBehaviour
     [SyncVar(hook = nameof(OnHealthChanged))]
     public float health = 100;
 
-    private void Update()
-    {
-     
-        if (isLocalPlayer && Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("Telling the server we shoot");
-            Shoot();
-        }
 
-
-    }
-
+    //TODO: THis should be moved from the health class
     [Command]
     void Shoot()
     {
@@ -33,11 +23,29 @@ public class Health : NetworkBehaviour
         health = Mathf.Max(0f, health - 10f);
         TookDamage();
     }
+    
+    [Command]
+    public void TakeDamage(float damage)
+    {
+        Debug.Log($"Taking {damage} damage");
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
 
     [TargetRpc]
     void TookDamage()
     {
         Debug.Log("We were shot!");
+    }
+
+    [TargetRpc]
+    void Die()
+    {
+        Debug.Log("We died!");
     }
 
     void OnHealthChanged(float oldHealth, float newHealth)

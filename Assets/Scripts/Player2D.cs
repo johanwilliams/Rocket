@@ -10,6 +10,7 @@ public class Player2D : NetworkBehaviour
     int holaCount = 0;
 
     public Rigidbody2D rb;
+    public Health health;
 
     [SerializeField] private float thrustForce = 200.0f;
     [SerializeField] private float rotationSpeed = 150f;    
@@ -22,7 +23,7 @@ public class Player2D : NetworkBehaviour
     void OnValidate()
     {
         rb = GetComponent<Rigidbody2D>();
-        //rb.isKinematic = true;
+        health = GetComponent<Health>();
     }
 
     private void Update()
@@ -49,12 +50,18 @@ public class Player2D : NetworkBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Collided with something!");
-        if (collision.collider.gameObject.layer == LayerMask.NameToLayer("ENvironment"))
+        // Only run on server
+        if (!isLocalPlayer)
+            return;
+
+        if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
-            Debug.Log($"Collided with the Environment with a force of {collision.relativeVelocity.magnitude}");
+            float magnitude = collision.relativeVelocity.magnitude;
+            Debug.Log($"Collided with the Environment with a force of {magnitude}");
+            if (magnitude > 10f)
+                health.TakeDamage(magnitude);
         }
     }
 
