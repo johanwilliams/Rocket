@@ -11,8 +11,8 @@ public class Player2D : NetworkBehaviour
 
     public Rigidbody2D rb;
 
-    [SerializeField] private float thrustForce = 50.0f;
-    [SerializeField] private float rotationSpeed = 10f;    
+    [SerializeField] private float thrustForce = 200.0f;
+    [SerializeField] private float rotationSpeed = 150f;    
 
     private float xAxis;
     private float yAxis;    
