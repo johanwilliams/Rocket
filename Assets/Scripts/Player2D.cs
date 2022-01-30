@@ -49,6 +49,15 @@ public class Player2D : NetworkBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collided with something!");
+        if (collision.collider.gameObject.layer == LayerMask.NameToLayer("ENvironment"))
+        {
+            Debug.Log($"Collided with the Environment with a force of {collision.relativeVelocity.magnitude}");
+        }
+    }
+
     #endregion
 
     #region NetworkBehaviour api    
