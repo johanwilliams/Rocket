@@ -132,7 +132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 113488174}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Spawnpoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 508381896}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Environment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -274,7 +274,7 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 100
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 1505258092809392848, guid: ddc94be6135732f479ac25a6f48045bd, type: 3}
+  playerPrefab: {fileID: 7905677300391368649, guid: d599f1f850a83f84fb2cce2b44ce779d, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 1
   spawnPrefabs: []
@@ -399,7 +399,7 @@ GameObject:
   - component: {fileID: 862638206}
   - component: {fileID: 862638205}
   - component: {fileID: 862638204}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Island
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -647,8 +647,8 @@ SpriteShapeRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -830662265
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_MaskInteraction: 0
@@ -686,7 +686,7 @@ GameObject:
   - component: {fileID: 917459553}
   - component: {fileID: 917459552}
   - component: {fileID: 917459554}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -878,8 +878,8 @@ SpriteShapeRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -830662265
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_MaskInteraction: 0
@@ -1019,7 +1019,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1722492616}
   - component: {fileID: 1722492617}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Spawn2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1063,7 +1063,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2051278093}
   - component: {fileID: 2051278094}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Spawn1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,8 +11,8 @@ public class Player2D : NetworkBehaviour
 
     public Rigidbody2D rb;
 
-    [SerializeField] private float thrustForce = 40.0f;
-    [SerializeField] private float rotationSpeed = 3f;    
+    [SerializeField] private float thrustForce = 50.0f;
+    [SerializeField] private float rotationSpeed = 10f;    
 
     private float xAxis;
     private float yAxis;    
@@ -29,7 +29,7 @@ public class Player2D : NetworkBehaviour
     {
         // Update input
         xAxis = Input.GetAxis("Horizontal");
-        yAxis = Mathf.Max(0f, Input.GetAxis("Vertical"));   // We don't want the rocket to be able to back up
+        yAxis = Mathf.Max(0f, Input.GetAxis("Vertical"));   // We don't want the rocket to be able to back up        
 
         if (isLocalPlayer && Input.GetKeyDown(KeyCode.X))
         {
