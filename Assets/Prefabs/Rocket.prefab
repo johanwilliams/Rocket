@@ -96,9 +96,10 @@ GameObject:
   - component: {fileID: 912507232370418237}
   - component: {fileID: 2484069111571207038}
   - component: {fileID: 7192649960689894218}
-  - component: {fileID: 561161955869242743}
   - component: {fileID: 710817795448617766}
   - component: {fileID: 2274453597669544695}
+  - component: {fileID: 561161955869242743}
+  - component: {fileID: 7451888458821417006}
   m_Layer: 6
   m_Name: Rocket
   m_TagString: Untagged
@@ -201,23 +202,6 @@ MonoBehaviour:
   visible: 0
   m_AssetId: d599f1f850a83f84fb2cce2b44ce779d
   hasSpawned: 0
---- !u!114 &561161955869242743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7905677300391368649}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bad0aeae92d3b4e41bef8c71990915e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  rb: {fileID: 2484069111571207038}
-  thrustForce: 60
-  rotationSpeed: 10
 --- !u!114 &710817795448617766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,6 +258,37 @@ MonoBehaviour:
   syncAngularVelocity: 1
   clearAngularVelocity: 0
   angularVelocitySensitivity: 0.1
+--- !u!114 &561161955869242743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7905677300391368649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bad0aeae92d3b4e41bef8c71990915e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  rb: {fileID: 2484069111571207038}
+  thrustForce: 60
+  rotationSpeed: 10
+--- !u!114 &7451888458821417006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7905677300391368649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be59881092abf984b8bd5af83a328ccb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!1 &8693585418949042521
 GameObject:
   m_ObjectHideFlags: 0
