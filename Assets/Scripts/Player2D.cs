@@ -50,12 +50,9 @@ public class Player2D : NetworkBehaviour
         }
     }
 
+    [ServerCallback]
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Only run on server
-        if (!isLocalPlayer)
-            return;
-
         if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
             float magnitude = collision.relativeVelocity.magnitude;
