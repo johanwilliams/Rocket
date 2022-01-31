@@ -35,11 +35,10 @@ public class LaserGun : NetworkBehaviour
         if (hit.collider != null)
         {
             // We hit something - draw the line
-            var player = hit.collider.gameObject.GetComponent<Player2D>();
-            if (player)
+            var health = hit.collider.gameObject.GetComponent<Health>();
+            if (health)
             {
-                //that menas it's a player- respawn them
-                StartCoroutine(Respawn(hit.collider.gameObject));
+                health.TakeDamage(20f);
             }
 
 
@@ -49,22 +48,6 @@ public class LaserGun : NetworkBehaviour
         {
             DrawLaser(laserTransform.position, laserTransform.position + laserTransform.up * range);
         }
-    }
-
-    [Server]    
-    IEnumerator Respawn(GameObject go)
-    {
-        //TODO: This respawn needs refactoring as it is not working as it should and is also located in the wrong script
-        
-        //Grab connection from player gameobject
-        NetworkConnection playerConn = go.GetComponent<NetworkIdentity>().connectionToClient;
-        NetworkServer.UnSpawn(go);
-        Transform newPos = NetworkManager.singleton.GetStartPosition();
-        go.transform.position = newPos.position;
-        go.transform.rotation = newPos.rotation;
-        yield return new WaitForSeconds(1f);        
-        NetworkServer.Spawn(go);
-        go.GetComponent<NetworkIdentity>().AssignClientAuthority(playerConn);
     }
 
     [ClientRpc]

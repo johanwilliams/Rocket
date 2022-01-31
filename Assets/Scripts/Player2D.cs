@@ -59,7 +59,7 @@ public class Player2D : NetworkBehaviour
         if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
             float magnitude = collision.relativeVelocity.magnitude;
-            Debug.Log($"Collided with the Environment with a force of {magnitude}");
+            //Debug.Log($"Collided with the Environment with a force of {magnitude}");
             if (magnitude > 10f)
                 health.TakeDamage(magnitude);
         }

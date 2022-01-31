@@ -7,24 +7,8 @@ public class Health : NetworkBehaviour
 {
 
     [SyncVar(hook = nameof(OnHealthChanged))]
-    public float health = 100;
-
-
-    //TODO: THis should be moved from the health class
-    [Command]
-    void Shoot()
-    {
-        Debug.Log("Client is shooting!");
-
-        //TODO: Calculate if we hit something
-
-
-        //But for now just decrese the health of the client who shot        
-        health = Mathf.Max(0f, health - 10f);
-        TookDamage();
-    }
+    public float health = 100f;    
     
-    [Command]
     public void TakeDamage(float damage)
     {
         Debug.Log($"Taking {damage} damage");
@@ -33,7 +17,25 @@ public class Health : NetworkBehaviour
         if (health <= 0)
         {
             Die();
+            health = 100;
+            StartCoroutine(Respawn(gameObject));
         }
+    }
+
+    [Server]
+    IEnumerator Respawn(GameObject go)
+    {
+        //TODO: This respawn needs refactoring as it is not working as it should
+
+        //Grab connection from player gameobject
+        NetworkConnection playerConn = go.GetComponent<NetworkIdentity>().connectionToClient;
+        NetworkServer.UnSpawn(go);
+        Transform newPos = NetworkManager.singleton.GetStartPosition();
+        go.transform.position = newPos.position;
+        go.transform.rotation = newPos.rotation;
+        yield return new WaitForSeconds(1f);
+        NetworkServer.Spawn(go);
+        go.GetComponent<NetworkIdentity>().AssignClientAuthority(playerConn);
     }
 
     [TargetRpc]
