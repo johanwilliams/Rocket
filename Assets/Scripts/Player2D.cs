@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using Cinemachine;
 
 public class Player2D : NetworkBehaviour
 {
@@ -16,9 +17,20 @@ public class Player2D : NetworkBehaviour
     [SerializeField] private float rotationSpeed = 150f;    
 
     private float xAxis;
-    private float yAxis;    
+    private float yAxis;
 
-    #region MonoBehaviour api
+    #region MonoBehaviour api    
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        if (isLocalPlayer)
+        {
+            GameObject camObj = GameObject.Find("2D Camera");
+            CinemachineVirtualCamera vcam = camObj.GetComponent<CinemachineVirtualCamera>();
+            vcam.Follow = transform;
+        }        
+    }
 
     void OnValidate()
     {

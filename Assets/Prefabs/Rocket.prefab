@@ -407,8 +407,8 @@ MonoBehaviour:
   syncInterval: 0.1
   rb: {fileID: 2484069111571207038}
   health: {fileID: 7451888458821417006}
-  thrustForce: 200
-  rotationSpeed: 150
+  thrustForce: 250
+  rotationSpeed: 120
 --- !u!114 &7451888458821417006
 MonoBehaviour:
   m_ObjectHideFlags: 0
