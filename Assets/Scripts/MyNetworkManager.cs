@@ -5,6 +5,19 @@ using Mirror;
 
 public class MyNetworkManager : NetworkManager
 {
+
+    public override void Start()
+    {
+        base.Start();
+ 
+        if (Application.isBatchMode) {
+            Debug.Log("Batch mode detected, starting server...");
+            NetworkManager.singleton.StartServer();
+        }
+    }
+
+
+
     #region Server System Callbacks
 
     /// <summary>
