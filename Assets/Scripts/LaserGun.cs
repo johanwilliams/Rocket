@@ -6,47 +6,69 @@ using System;
 
 public class LaserGun : NetworkBehaviour
 {
-    public Transform laserTransform;
+    [SerializeField] private float fireRate = 0;
+    [SerializeField] private float damage = 10f;    
+    [SerializeField] private float range = 100.0f;
+    [SerializeField] private float duration = 0.2f;
+    [SerializeField] private LayerMask hitLayers;
+
+    private float timeToFire = 0;
+
+    public Transform firePoint;
     public LineRenderer line;
 
-    [SerializeField] private float range = 100.0f;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    
+    
 
     // Update is called once per frame
     void Update()
     {
-        if (isLocalPlayer && Input.GetKeyDown(KeyCode.Space))
+        Debug.DrawLine(firePoint.position, firePoint.position + firePoint.up * range, Color.gray);
+
+        if (!isLocalPlayer)
+            return;
+        
+        if (fireRate == 0)
         {
-            //We want to shoot
-            Shoot();
+            if (Input.GetButtonDown("Fire1"))
+            {
+                Shoot();
+            }
         }
+        else
+        {
+            if (Input.GetButton("Fire1") && Time.time > timeToFire)
+            {
+                timeToFire = Time.time + 1 / fireRate;
+                Shoot();
+            }
+        }                
     }
 
     [Command]
     public void Shoot()
     {
-        //do a raycast to see where we hit
-        RaycastHit2D hit = Physics2D.Raycast(laserTransform.position, laserTransform.up, range);
+        Debug.Log("SHOOT");
+
+        //do a raycast to see where we hit        
+        RaycastHit2D hit = Physics2D.Raycast(firePoint.position, firePoint.up, range, hitLayers);        
         if (hit.collider != null)
         {
+            Debug.Log($"We hit {hit.collider.name}");
             // We hit something - draw the line
             var health = hit.collider.gameObject.GetComponent<Health>();
             if (health)
             {
-                health.TakeDamage(20f);
+                Debug.Log("We hit something with health!");
+                health.TakeDamage(damage);
             }
 
 
-            DrawLaser(laserTransform.position, hit.point);
+            DrawLaser(firePoint.position, hit.point);
 
         } else
         {
-            DrawLaser(laserTransform.position, laserTransform.position + laserTransform.up * range);
+            DrawLaser(firePoint.position, firePoint.position + firePoint.up * range);
         }
     }
 
@@ -58,9 +80,10 @@ public class LaserGun : NetworkBehaviour
 
     IEnumerator LaserFlash(Vector2 start, Vector2 end)
     {
+        Debug.DrawLine(start, end, Color.red);
         line.SetPosition(0, start);
         line.SetPosition(1, end);
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(duration);
         line.SetPosition(0, Vector2.zero);
         line.SetPosition(1, Vector2.zero);
     }

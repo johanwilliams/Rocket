@@ -14,7 +14,9 @@ public class Player2D : NetworkBehaviour
     public Health health;
 
     [SerializeField] private float thrustForce = 200.0f;
-    [SerializeField] private float rotationSpeed = 150f;    
+    [SerializeField] private float rotationSpeed = 150f;
+
+    [SerializeField] private string localLayerName = "PlayerLocal";
 
     private float xAxis;
     private float yAxis;
@@ -29,7 +31,19 @@ public class Player2D : NetworkBehaviour
             GameObject camObj = GameObject.Find("2D Camera");
             CinemachineVirtualCamera vcam = camObj.GetComponent<CinemachineVirtualCamera>();
             vcam.Follow = transform;
+            SetLocalPlayerLayer();
         }        
+    }
+
+    void SetLocalPlayerLayer()
+    {
+        int newLayer = LayerMask.NameToLayer(localLayerName);
+        gameObject.layer = newLayer;
+
+        foreach (Transform trans in gameObject.GetComponentsInChildren<Transform>(true))
+        {
+            trans.gameObject.layer = newLayer;
+        }
     }
 
     void OnValidate()
@@ -69,8 +83,8 @@ public class Player2D : NetworkBehaviour
         {
             float magnitude = collision.relativeVelocity.magnitude;
             //Debug.Log($"Collided with the Environment with a force of {magnitude}");
-            if (magnitude > 10f)
-                health.TakeDamage(magnitude);
+            if (magnitude > 20f)
+                health.TakeDamage(magnitude * 0.25f);
         }
     }
 

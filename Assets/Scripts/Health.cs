@@ -7,8 +7,9 @@ public class Health : NetworkBehaviour
 {
 
     [SyncVar(hook = nameof(OnHealthChanged))]
-    public float health = 100f;    
-    
+    public float health = 100f;
+    [SerializeField] private float respawnTime = 2f;
+
     public void TakeDamage(float damage)
     {
         Debug.Log($"Taking {damage} damage");
@@ -33,7 +34,7 @@ public class Health : NetworkBehaviour
         Transform newPos = NetworkManager.singleton.GetStartPosition();
         go.transform.position = newPos.position;
         go.transform.rotation = newPos.rotation;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(respawnTime);
         NetworkServer.Spawn(go);
         go.GetComponent<NetworkIdentity>().AssignClientAuthority(playerConn);
     }
