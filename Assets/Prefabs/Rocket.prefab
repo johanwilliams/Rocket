@@ -319,6 +319,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   health: 100
+  respawnTime: 2
 --- !u!114 &8870855014732611167
 MonoBehaviour:
   m_ObjectHideFlags: 0
