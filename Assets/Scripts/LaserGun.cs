@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using System;
+using UnityEngine.InputSystem;
 
 public class LaserGun : NetworkBehaviour
 {
@@ -12,13 +13,33 @@ public class LaserGun : NetworkBehaviour
     [SerializeField] private float duration = 0.2f;
     [SerializeField] private LayerMask hitLayers;
 
+    private bool fire1 = false;
     private float timeToFire = 0;
 
     public Transform firePoint;
     public LineRenderer line;
 
-    
-    
+
+    #region Input Management
+
+    public void OnFire1Changed(InputAction.CallbackContext context)
+    {
+        fire1 = context.performed;
+    }
+
+
+    #endregion
+
+    #region NetworkBehaviour api    
+
+    public override void OnStartServer()
+    {
+        //rb.isKinematic = false;
+    }
+
+    #endregion
+
+
     [Client]
     /// <summary>
     /// Run for the local player. 
@@ -31,22 +52,12 @@ public class LaserGun : NetworkBehaviour
 
         if (!isLocalPlayer)
             return;
-        
-        if (fireRate == 0)
+
+        if (fire1 && Time.time > timeToFire)
         {
-            if (Input.GetButtonDown("Fire1"))
-            {
-                Shoot();                
-            }
+            timeToFire = Time.time + 1 / fireRate;
+            Shoot();
         }
-        else
-        {
-            if (Input.GetButton("Fire1") && Time.time > timeToFire)
-            {
-                timeToFire = Time.time + 1 / fireRate;
-                Shoot();                
-            }
-        }                
     }
 
     /// <summary>
