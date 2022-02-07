@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.0714484, g: 0.071785554, b: 0.09563314, a: 1}
+  m_IndirectSpecularColor: {r: 0.090811655, g: 0.094466284, b: 0.12548132, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -134,7 +134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 59258704}
   - component: {fileID: 59258705}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -218,7 +218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 95047361}
   - component: {fileID: 95047362}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,7 +302,7 @@ GameObject:
   m_Component:
   - component: {fileID: 110641906}
   - component: {fileID: 110641907}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant2 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -385,7 +385,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 113488174}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Spawnpoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -421,7 +421,7 @@ GameObject:
   m_Component:
   - component: {fileID: 123465887}
   - component: {fileID: 123465888}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -505,7 +505,7 @@ GameObject:
   m_Component:
   - component: {fileID: 199677303}
   - component: {fileID: 199677304}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -591,7 +591,7 @@ GameObject:
   - component: {fileID: 201524398}
   - component: {fileID: 201524397}
   - component: {fileID: 201524396}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Island (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -866,7 +866,7 @@ GameObject:
   m_Component:
   - component: {fileID: 203597551}
   - component: {fileID: 203597552}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant3 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -950,7 +950,7 @@ GameObject:
   m_Component:
   - component: {fileID: 207804644}
   - component: {fileID: 207804645}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant3 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1034,7 +1034,7 @@ GameObject:
   m_Component:
   - component: {fileID: 211796853}
   - component: {fileID: 211796854}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant3 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1118,7 +1118,7 @@ GameObject:
   m_Component:
   - component: {fileID: 223757767}
   - component: {fileID: 223757768}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant2 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1201,7 +1201,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 233621269}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Plants
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1270,7 +1270,7 @@ GameObject:
   m_Component:
   - component: {fileID: 261471702}
   - component: {fileID: 261471703}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1353,7 +1353,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 508381896}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Environment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1389,7 +1389,7 @@ GameObject:
   m_Component:
   - component: {fileID: 519293377}
   - component: {fileID: 519293378}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant3 (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1473,7 +1473,7 @@ GameObject:
   m_Component:
   - component: {fileID: 548830107}
   - component: {fileID: 548830108}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1556,7 +1556,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 616354202}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1732,7 +1732,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.2, y: 1}
+    m_SensorSize: {x: 1.4484537, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1795,7 +1795,6 @@ GameObject:
   m_Component:
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
-  - component: {fileID: 705507996}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -1880,18 +1879,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!114 &705507996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 705507993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &716803234
 GameObject:
   m_ObjectHideFlags: 0
@@ -1902,7 +1889,7 @@ GameObject:
   m_Component:
   - component: {fileID: 716803235}
   - component: {fileID: 716803236}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Spawn4
   m_TagString: Untagged
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
@@ -1946,7 +1933,7 @@ GameObject:
   m_Component:
   - component: {fileID: 740746973}
   - component: {fileID: 740746974}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Spawn3
   m_TagString: Untagged
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
@@ -1990,7 +1977,7 @@ GameObject:
   m_Component:
   - component: {fileID: 755244819}
   - component: {fileID: 755244820}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2076,7 +2063,7 @@ GameObject:
   - component: {fileID: 875542693}
   - component: {fileID: 875542692}
   - component: {fileID: 875542691}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Island (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2351,7 +2338,7 @@ GameObject:
   m_Component:
   - component: {fileID: 958466496}
   - component: {fileID: 958466497}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant2 (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2435,7 +2422,7 @@ GameObject:
   m_Component:
   - component: {fileID: 960599799}
   - component: {fileID: 960599800}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant3 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2726,7 +2713,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1152853427}
   - component: {fileID: 1152853428}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2810,7 +2797,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1170477406}
   - component: {fileID: 1170477407}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2894,7 +2881,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1211085236}
   - component: {fileID: 1211085237}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2978,7 +2965,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1222833707}
   - component: {fileID: 1222833708}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3062,7 +3049,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1222921383}
   - component: {fileID: 1222921384}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant2 (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3146,7 +3133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1237733144}
   - component: {fileID: 1237733145}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3230,7 +3217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1272445325}
   - component: {fileID: 1272445326}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant2 (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3314,7 +3301,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1278844711}
   - component: {fileID: 1278844712}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant3 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3399,7 +3386,7 @@ GameObject:
   - component: {fileID: 1349176241}
   - component: {fileID: 1349176243}
   - component: {fileID: 1349176242}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4589,7 +4576,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1372298252}
   - component: {fileID: 1372298253}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4673,7 +4660,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1381704655}
   - component: {fileID: 1381704656}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant2 (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4757,7 +4744,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1455282876}
   - component: {fileID: 1455282877}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4841,7 +4828,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1532784429}
   - component: {fileID: 1532784430}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4925,7 +4912,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1538929915}
   - component: {fileID: 1538929916}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant2 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5011,7 +4998,7 @@ GameObject:
   - component: {fileID: 1615800372}
   - component: {fileID: 1615800371}
   - component: {fileID: 1615800374}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Island
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5284,7 +5271,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1688863284}
   - component: {fileID: 1688863285}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5368,7 +5355,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1694315071}
   - component: {fileID: 1694315072}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (19)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5452,7 +5439,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1722492616}
   - component: {fileID: 1722492617}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Spawn2
   m_TagString: Untagged
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
@@ -5496,7 +5483,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1819525113}
   - component: {fileID: 1819525114}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant2 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5579,7 +5566,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1839175228}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Islands
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5615,7 +5602,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1895814422}
   - component: {fileID: 1895814423}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5699,7 +5686,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1911804694}
   - component: {fileID: 1911804695}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5783,7 +5770,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1913192255}
   - component: {fileID: 1913192256}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5869,7 +5856,7 @@ GameObject:
   - component: {fileID: 1949657967}
   - component: {fileID: 1949657966}
   - component: {fileID: 1949657965}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Island (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6227,7 +6214,7 @@ GameObject:
   - component: {fileID: 1950491958}
   - component: {fileID: 1950491957}
   - component: {fileID: 1950491959}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7072,7 +7059,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2026733279}
   - component: {fileID: 2026733280}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7156,7 +7143,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2033834229}
   - component: {fileID: 2033834230}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JunglePlant2 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7240,7 +7227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2051278093}
   - component: {fileID: 2051278094}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Spawn1
   m_TagString: Untagged
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
@@ -7284,7 +7271,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2094123800}
   - component: {fileID: 2094123801}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: JungleGrass (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

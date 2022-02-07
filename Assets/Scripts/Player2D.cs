@@ -19,6 +19,8 @@ public class Player2D : NetworkBehaviour
 
     [SerializeField] private string localLayerName = "PlayerLocal";
 
+    private LaserGun laserGun;
+
     private float rotation;
     private float throttle;
 
@@ -33,6 +35,8 @@ public class Player2D : NetworkBehaviour
             CinemachineVirtualCamera vcam = camObj.GetComponent<CinemachineVirtualCamera>();
             vcam.Follow = transform;
             SetLocalPlayerLayer();
+
+            laserGun = GetComponent<LaserGun>();
         }        
     }
 
@@ -101,6 +105,12 @@ public class Player2D : NetworkBehaviour
         rotation = context.ReadValue<Vector2>().x;
     }
 
+    public void OnFire1Changed(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            laserGun.Shoot();
+    }
+
     #endregion
 
     #region NetworkBehaviour api    
@@ -108,6 +118,14 @@ public class Player2D : NetworkBehaviour
     public override void OnStartServer()
     {
         //rb.isKinematic = false;
+    }
+
+    public override void OnStartAuthority()
+    {
+        base.OnStartAuthority();
+
+        UnityEngine.InputSystem.PlayerInput playerInput = GetComponent<UnityEngine.InputSystem.PlayerInput>();
+        playerInput.enabled = true;
     }
 
     #endregion

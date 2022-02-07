@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using System;
-using UnityEngine.InputSystem;
 
 public class LaserGun : NetworkBehaviour
 {
@@ -13,22 +12,17 @@ public class LaserGun : NetworkBehaviour
     [SerializeField] private float duration = 0.2f;
     [SerializeField] private LayerMask hitLayers;
 
-    private bool fire1 = false;
+    [SerializeField] private ParticleSystem muzzleFlashParticleSystem;
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private ParticleSystem impactParticleSystem;
+    [SerializeField] private TrailRenderer laserTrail;
+
     private float timeToFire = 0;
 
-    public Transform firePoint;
+    
     public LineRenderer line;
 
 
-    #region Input Management
-
-    public void OnFire1Changed(InputAction.CallbackContext context)
-    {
-        fire1 = context.performed;
-    }
-
-
-    #endregion
 
     #region NetworkBehaviour api    
 
@@ -50,35 +44,39 @@ public class LaserGun : NetworkBehaviour
     {
         Debug.DrawLine(firePoint.position, firePoint.position + firePoint.up * range, Color.gray);
 
-        if (!isLocalPlayer)
+        /*if (!isLocalPlayer)
             return;
 
         if (fire1 && Time.time > timeToFire)
         {
             timeToFire = Time.time + 1 / fireRate;
             Shoot();
-        }
+        }*/
     }
 
+    [Client]
     /// <summary>
     /// Shoot method for the local player. This to avoid the lag of going to the server and back and then render the shot (which will not look good).
     /// Makes a raycast to find a hitpoint and if so renders the shot.
     /// </summary>
     public void Shoot()
     {
-        Debug.Log("Client: Shoot");
+        if (Time.time > timeToFire) { 
+            Debug.Log("Client: Shoot");
 
-        //do a raycast to see where we hit        
-        RaycastHit2D hit = Physics2D.Raycast(firePoint.position, firePoint.up, range, hitLayers);
-        if (hit.collider != null)
-        {            
-            StartCoroutine(LaserFlash(firePoint.position, hit.point));
+            //do a raycast to see where we hit        
+            RaycastHit2D hit = Physics2D.Raycast(firePoint.position, firePoint.up, range, hitLayers);
+            if (hit.collider != null)
+            {            
+                StartCoroutine(LaserFlash(firePoint.position, hit.point));
+            }
+            else
+            {
+                StartCoroutine(LaserFlash(firePoint.position, firePoint.position + firePoint.up * range));
+            }
+            CmdShoot();
+            timeToFire = Time.time + 1 / fireRate;
         }
-        else
-        {
-            StartCoroutine(LaserFlash(firePoint.position, firePoint.position + firePoint.up * range));
-        }
-        CmdShoot();
     }
 
     /// <summary>

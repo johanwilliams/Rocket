@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3278987381437089424}
   - component: {fileID: 2039222259917430669}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: ShipSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4616202410175028805}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Lasergun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 8870855014732611167}
   - component: {fileID: 8615241673244214907}
   - component: {fileID: -1620726425180420212}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Rocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -341,8 +341,11 @@ MonoBehaviour:
   duration: 0.05
   hitLayers:
     serializedVersion: 2
-    m_Bits: 448
+    m_Bits: 640
+  muzzleFlashParticleSystem: {fileID: 0}
   firePoint: {fileID: 4616202410175028805}
+  impactParticleSystem: {fileID: 0}
+  laserTrail: {fileID: 0}
   line: {fileID: 8615241673244214907}
 --- !u!120 &8615241673244214907
 LineRenderer:
@@ -468,7 +471,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7905677300391368649}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
@@ -505,8 +508,8 @@ MonoBehaviour:
     m_ActionName: Rocket/Throttle
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8870855014732611167}
-        m_TargetAssemblyTypeName: LaserGun, Assembly-CSharp
+      - m_Target: {fileID: 561161955869242743}
+        m_TargetAssemblyTypeName: Player2D, Assembly-CSharp
         m_MethodName: OnFire1Changed
         m_Mode: 0
         m_Arguments:
@@ -549,7 +552,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6642512285225923746}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
