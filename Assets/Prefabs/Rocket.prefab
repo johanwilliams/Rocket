@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3278987381437089424}
   - component: {fileID: 2039222259917430669}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: ShipSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4616202410175028805}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Lasergun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 7451888458821417006}
   - component: {fileID: 8870855014732611167}
   - component: {fileID: -1620726425180420212}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Rocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,7 +210,7 @@ Rigidbody2D:
   m_Material: {fileID: 6200000, guid: 16a74c3657b78cf46bf8cd0ee15129aa, type: 2}
   m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &7192649960689894218
 MonoBehaviour:
@@ -303,7 +303,7 @@ MonoBehaviour:
   health: {fileID: 7451888458821417006}
   thrustForce: 250
   rotationSpeed: 120
-  localLayerName: PlayerLocal
+  remoteLayerName: PlayerRemote
 --- !u!114 &7451888458821417006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,10 +334,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  fireRate: 5
+  fireRate: 3
   damage: 10
-  range: 100
-  duration: 0.05
+  range: 200
+  spread: 0.05
   hitLayers:
     serializedVersion: 2
     m_Bits: 640
@@ -346,7 +346,6 @@ MonoBehaviour:
   impactParticleSystem: {fileID: 0}
   laserTrail: {fileID: 250305730072771072, guid: 6c8790a8906b87e43bff256ae2d13837,
     type: 3}
-  line: {fileID: 0}
 --- !u!114 &-1620726425180420212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -435,7 +434,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6642512285225923746}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}

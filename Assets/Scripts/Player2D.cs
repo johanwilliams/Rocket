@@ -17,7 +17,7 @@ public class Player2D : NetworkBehaviour
     [SerializeField] private float thrustForce = 200.0f;
     [SerializeField] private float rotationSpeed = 150f;
 
-    [SerializeField] private string localLayerName = "PlayerLocal";
+    [SerializeField] private string remoteLayerName = "PlayerRemote";
 
     private LaserGun laserGun;
 
@@ -29,26 +29,29 @@ public class Player2D : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        laserGun = GetComponent<LaserGun>();
+
         if (isLocalPlayer)
         {
             GameObject camObj = GameObject.Find("2D Camera");
             CinemachineVirtualCamera vcam = camObj.GetComponent<CinemachineVirtualCamera>();
             vcam.Follow = transform;
-            SetLocalPlayerLayer();
-
-            laserGun = GetComponent<LaserGun>();
-        }        
+        }
+        else
+        {
+            SetRemotePlayerLayer();
+        }
     }
 
-    void SetLocalPlayerLayer()
+    void Reset()
     {
-        int newLayer = LayerMask.NameToLayer(localLayerName);
-        gameObject.layer = newLayer;
 
-        foreach (Transform trans in gameObject.GetComponentsInChildren<Transform>(true))
-        {
-            trans.gameObject.layer = newLayer;
-        }
+    }
+
+    void SetRemotePlayerLayer()
+    {
+        Debug.Log("Setting remote player layer");
+        gameObject.layer = LayerMask.NameToLayer(remoteLayerName);
     }
 
     void OnValidate()
@@ -82,12 +85,12 @@ public class Player2D : NetworkBehaviour
     [ServerCallback]
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Environment"))
+        if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             float magnitude = collision.relativeVelocity.magnitude;
-            //Debug.Log($"Collided with the Environment with a force of {magnitude}");
-            if (magnitude > 20f)
-                health.TakeDamage(magnitude * 0.25f);
+            //Debug.Log($"Collided with the Ground with a force of {magnitude}");
+            if (magnitude > 50f)
+                health.TakeDamage(magnitude * 0.1f);
         }
     }
 
@@ -108,7 +111,10 @@ public class Player2D : NetworkBehaviour
     public void OnFire1Changed(InputAction.CallbackContext context)
     {
         if (context.performed)
-            laserGun.Shoot();
+            laserGun.SetShooting(true);
+
+        if (context.canceled)
+            laserGun.SetShooting(false);
     }
 
     #endregion
