@@ -89,6 +89,8 @@ public class LaserGun : NetworkBehaviour
     {
         Debug.Log("Server: Shoot");
 
+        Vector2 firePoint2 = new Vector2(firePoint.position.x, firePoint.position.y);
+
         //do a raycast to see where we hit        
         RaycastHit2D hit = Physics2D.Raycast(firePoint.position, firePoint.up, range, hitLayers);        
         if (hit.collider != null)
@@ -100,11 +102,11 @@ public class LaserGun : NetworkBehaviour
                 Debug.Log("We hit something with health!");
                 health.TakeDamage(damage);
             }
-            RpcDrawLaser(firePoint.position, hit.point);
+            RpcDrawLaser(firePoint2, hit.point);
 
         } else
         {
-            RpcDrawLaser(firePoint.position, firePoint.position + firePoint.up * range);
+            RpcDrawLaser(firePoint2, firePoint.position + firePoint.up * range);
         }
     }
 
@@ -130,14 +132,26 @@ public class LaserGun : NetworkBehaviour
     /// <returns></returns>
     IEnumerator LaserFlash(Vector2 start, Vector2 end)
     {
-        Debug.Log("Client: Render");
-        Debug.DrawLine(start, end, Color.red);
-        line.enabled = true;
-        line.SetPosition(0, start);
-        line.SetPosition(1, end);
-        yield return new WaitForSeconds(duration);
-        line.enabled = false;
-        //line.SetPosition(0, Vector2.zero);
-        //line.SetPosition(1, Vector2.zero);
+        //TODO: Use object pooling
+        //muzzleFlashParticleSystem.Play();
+        Vector3 start3 = new Vector3(start.x, start.y, 0f);
+        Vector3 end3 = new Vector3(end.x, end.y, 0f);
+
+        float time = 0;
+        TrailRenderer trail = Instantiate(laserTrail, firePoint.position, Quaternion.identity);
+
+        while (time < 1)
+        {
+            trail.transform.position = Vector3.Lerp(start3, end3, time);
+            time += Time.deltaTime / trail.time;
+
+            yield return null;
+        }
+        trail.transform.position = end3;
+
+        //Instantiate impact particle system
+        //Instantiate(impactParticleSystem, end3, Quaternion.LookRotation(hit.normal));
+
+        Destroy(trail.gameObject, trail.time);        
     }
 }
