@@ -16,10 +16,12 @@ public class Health : NetworkBehaviour
         health -= damage;
 
         if (health <= 0)
-        {
+        {            
             Die();
             health = 100;
             StartCoroutine(Respawn(gameObject));
+
+            
         }
     }
 
@@ -45,15 +47,15 @@ public class Health : NetworkBehaviour
         Debug.Log("We were shot!");
     }
 
-    [TargetRpc]
+    [ClientRpc]
     void Die()
     {
-        Debug.Log("We died!");
+        Debug.Log("We died!");        
     }
 
     void OnHealthChanged(float oldHealth, float newHealth)
     {
-        Debug.Log($"Health changed from {oldHealth} to {newHealth}");
+        Debug.Log($"Health changed from {oldHealth} to {newHealth}");                    
     }
 
 }

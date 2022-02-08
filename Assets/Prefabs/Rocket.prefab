@@ -320,6 +320,8 @@ MonoBehaviour:
   syncInterval: 0.1
   health: 100
   respawnTime: 2
+  deathEffect: {fileID: 8923641824116766268, guid: 57bf8207efdf3014791e853c3f8ce9e4,
+    type: 3}
 --- !u!114 &8870855014732611167
 MonoBehaviour:
   m_ObjectHideFlags: 0
