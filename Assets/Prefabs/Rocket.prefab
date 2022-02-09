@@ -163,7 +163,9 @@ GameObject:
   - component: {fileID: 2274453597669544695}
   - component: {fileID: 561161955869242743}
   - component: {fileID: 7451888458821417006}
+  - component: {fileID: 7898031010828450007}
   - component: {fileID: 8870855014732611167}
+  - component: {fileID: 3766997271460112262}
   - component: {fileID: -1620726425180420212}
   m_Layer: 6
   m_Name: Rocket
@@ -354,6 +356,20 @@ MonoBehaviour:
   health: 100
   respawnTime: 2
   deathEffect: {fileID: 8923641824933876956}
+--- !u!114 &7898031010828450007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7905677300391368649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00483ecb074eded49a5517f659a1e79d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!114 &8870855014732611167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,6 +396,18 @@ MonoBehaviour:
   impactParticleSystem: {fileID: 0}
   laserTrail: {fileID: 250305730072771072, guid: 6c8790a8906b87e43bff256ae2d13837,
     type: 3}
+--- !u!114 &3766997271460112262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7905677300391368649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3fe37e09dc02564fb9171e58ff4fa54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-1620726425180420212
 MonoBehaviour:
   m_ObjectHideFlags: 0

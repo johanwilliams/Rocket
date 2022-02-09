@@ -112,11 +112,8 @@ public class LaserGun : NetworkBehaviour
     [Command]
     public void CmdShoot(Vector2 start, Vector2 end, Health health)
     {
-        Debug.Log("Server: Shoot");
-
         if (health != null)
         {
-            Debug.Log("Server: We hit something with health!");
             health.TakeDamage(damage);
         }
         RpcDrawLaser(start, end);
