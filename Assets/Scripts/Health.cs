@@ -10,52 +10,47 @@ public class Health : NetworkBehaviour
     public float health = 100f;
     [SerializeField] private float respawnTime = 2f;
 
+    [SerializeField] private ParticleSystem deathEffect;
+
     public void TakeDamage(float damage)
     {
-        Debug.Log($"Taking {damage} damage");
+        if (!isServer) return;
+        
         health -= damage;
+        Debug.Log($"{gameObject.name} taking {damage} damage. Health: {health}");
 
         if (health <= 0)
-        {            
-            Die();
-            health = 100;
-            StartCoroutine(Respawn(gameObject));
-
-            
+        {
+            RpcRespawn();
         }
-    }
-
-    [Server]
-    IEnumerator Respawn(GameObject go)
-    {
-        //TODO: This respawn needs refactoring as it is not working as it should
-
-        //Grab connection from player gameobject
-        NetworkConnection playerConn = go.GetComponent<NetworkIdentity>().connectionToClient;
-        NetworkServer.UnSpawn(go);
-        Transform newPos = NetworkManager.singleton.GetStartPosition();
-        go.transform.position = newPos.position;
-        go.transform.rotation = newPos.rotation;
-        yield return new WaitForSeconds(respawnTime);
-        NetworkServer.Spawn(go);
-        go.GetComponent<NetworkIdentity>().AssignClientAuthority(playerConn);
-    }
+    }    
 
     [TargetRpc]
-    void TookDamage()
+    void RpcRespawn()
     {
-        Debug.Log("We were shot!");
+        Debug.Log("We died! Respawning");
+        StartCoroutine(Respawn());
+        Reset();
     }
 
-    [ClientRpc]
-    void Die()
+    //TODO: Should not be in the health script but rather some player management script
+    IEnumerator Respawn()
     {
-        Debug.Log("We died!");        
+        yield return new WaitForSeconds(respawnTime);
+        this.transform.position = NetworkManager.startPositions[Random.Range(0, NetworkManager.startPositions.Count)].position;
     }
 
     void OnHealthChanged(float oldHealth, float newHealth)
     {
-        Debug.Log($"Health changed from {oldHealth} to {newHealth}");                    
+        Debug.Log($"Health changed from {oldHealth} to {newHealth}");
+        if (health <= 0)
+            deathEffect.Play();
+    }
+
+    [Command]
+    private void Reset()
+    {
+        health = 100;
     }
 
 }

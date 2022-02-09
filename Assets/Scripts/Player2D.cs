@@ -7,10 +7,6 @@ using UnityEngine.InputSystem;
 
 public class Player2D : NetworkBehaviour
 {
-
-    [SyncVar(hook = nameof(OnHolaCountChanged))]
-    int holaCount = 0;
-
     public Rigidbody2D rb;
     public Health health;
 
@@ -146,35 +142,6 @@ public class Player2D : NetworkBehaviour
     private void Rotate(float amount)
     {    
         rb.AddTorque(amount);
-    }
-
-    #endregion
-
-    #region Data syncronization test
-
-    [Command]
-    void Hola()
-    {
-        Debug.Log("Received Hola from client!");
-        holaCount++;
-        ReplyHola();
-    }
-
-    [TargetRpc]
-    void ReplyHola()
-    {
-        Debug.Log("Received Hola from server");
-    }
-
-    [ClientRpc]
-    void TooHigh()
-    {
-        Debug.Log("Too high!");
-    }
-
-    void OnHolaCountChanged(int oldCount, int newCount)
-    {
-        Debug.Log($"Hola count changed from {oldCount} to {newCount}");
     }
 
     #endregion
