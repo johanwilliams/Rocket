@@ -112,6 +112,8 @@ public class LaserGun : NetworkBehaviour
     [Command]
     public void CmdShoot(Vector2 start, Vector2 end, Health health)
     {
+        //TODO: We need to do a raycast here as well. We can't trust the client shot someone. Not just due to authority but more latency
+
         if (health != null)
         {
             health.TakeDamage(damage);

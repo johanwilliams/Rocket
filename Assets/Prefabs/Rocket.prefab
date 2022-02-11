@@ -140,7 +140,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5012786997660822149}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.348, z: 0}
+  m_LocalPosition: {x: 0, y: 1.44, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -334,11 +334,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  rb: {fileID: 2484069111571207038}
-  health: {fileID: 7451888458821417006}
-  thrustForce: 250
-  rotationSpeed: 120
   remoteLayerName: PlayerRemote
+  groundCollisionEnabled: 1
+  magnitudeThreshold: 50
+  damageModifier: 0.1
+  deathEffect: {fileID: 8923641824933876956}
 --- !u!114 &7451888458821417006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,9 +353,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  maxHealth: 100
   health: 100
+  destroyOnDeath: 0
   respawnTime: 2
-  deathEffect: {fileID: 8923641824933876956}
 --- !u!114 &7898031010828450007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -390,7 +391,7 @@ MonoBehaviour:
   spread: 0.05
   hitLayers:
     serializedVersion: 2
-    m_Bits: 640
+    m_Bits: 704
   muzzleFlashParticleSystem: {fileID: 0}
   firePoint: {fileID: 4616202410175028805}
   impactParticleSystem: {fileID: 0}
@@ -408,6 +409,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3fe37e09dc02564fb9171e58ff4fa54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thrustForce: 200
+  rotationForce: 150
 --- !u!114 &-1620726425180420212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482,6 +485,86 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: fa524c5d-2ca6-410b-a7a0-9e39fbae06e6
     m_ActionName: Rocket/Rotate[/DualShock4GamepadHID/leftStick,/Keyboard/a]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 561161955869242743}
+        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+        m_MethodName: OnDebug1Changed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 85327cb8-d575-4dda-8624-d0dfc0fadd42
+    m_ActionName: Rocket/Debug1[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 561161955869242743}
+        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+        m_MethodName: OnDebug2Changed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 06ebfd58-6b37-43b9-8ece-268920c1e3a7
+    m_ActionName: Rocket/Debug2[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 561161955869242743}
+        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+        m_MethodName: OnDebug3Changed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 67a004d6-71d2-4afd-af75-d1d41ad0a7cb
+    m_ActionName: Rocket/Debug3[/Keyboard/3]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 561161955869242743}
+        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+        m_MethodName: OnDebug4Changed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: eaf27efa-143d-4b7f-8d28-02941231fe47
+    m_ActionName: Rocket/Debug4[/Keyboard/4]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 561161955869242743}
+        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+        m_MethodName: OnDebug5Changed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a4aee526-7d24-4593-84f6-e32c693aa3b2
+    m_ActionName: Rocket/Debug5[/Keyboard/5]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Rocket

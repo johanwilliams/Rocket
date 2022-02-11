@@ -4,52 +4,64 @@ using UnityEngine;
 using Mirror;
 
 public class Health : NetworkBehaviour
-{
+{    
+    [SerializeField] private float maxHealth = 100f;
     [SyncVar(hook = nameof(OnHealthChanged))]
-    public float health = 100f;
-    [SerializeField] private float respawnTime = 2f;
-    [SerializeField] private ParticleSystem deathEffect;
+    [SerializeField] private float health;   //TODO: Make private when we have UI to show the health
+    [SerializeField] private bool destroyOnDeath = false;
 
-    [Header("Ground collision")]
-    [SerializeField] private bool groundCollisionEnabled = true;
-    [SerializeField] [Range(0f, 200f)] private float magnitudeThreshold = 50f;
-    [SerializeField] [Range(0f, 1f)] private float damageModifier = 0.1f;
-    [SerializeField] private LayerMask test;
+    //TODO: Move from Health
+    [SerializeField] private float respawnTime = 2f;    
+
+    // Delegate and Action called when health reaches 0 and we die
+    public delegate void DiedAction();
+    public event DiedAction OnDeath;
+
+    private bool isDead;
+
+    #region Monobeahviour
+
+    private void Start()
+    {
+        Reset();
+
+        // Subscibe to our own action if we are to destroy this gameobject on death
+        if (destroyOnDeath)
+            OnDeath += CmdDie;
+    }
+    
+
+    private void Update()
+    {
+        if (health <= 0 && !isDead)
+        {
+            isDead = true;
+            if (OnDeath != null)
+                OnDeath();
+        }
+    }
+
+    #endregion
+
+    public void Reset()
+    {
+        health = maxHealth;
+        isDead = false;
+    }
 
     public void TakeDamage(float damage)
     {
-        if (!isServer) return;
-        
-        health -= damage;
-        Debug.Log($"{gameObject.name} taking {damage} damage. Health: {health}");
+        if (!isServer || health <= 0)
+            return;
+
+        health = Mathf.Clamp(health - damage, 0, maxHealth);
+        Debug.Log($"{gameObject.name} took {damage} damage and now has a health of {health}");
 
         if (health <= 0)
         {
             RpcRespawn();
         }
-    }
-
-    /// <summary>
-    /// Triggers on collision and checks if collided with the ground layer.
-    /// If ground collisions is enabled we check if the magnitude of the collision is greather than the defined
-    /// threshold to give damage. If so we take damage using the magnitude times the damage modifier
-    /// </summary>
-    /// <param name="collision">Collision details</param>    
-    private void OnCollisionEnter2D(Collision2D collision)
-    {        
-        if (isLocalPlayer && groundCollisionEnabled && collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            float magnitude = collision.relativeVelocity.magnitude;
-            if (magnitude > magnitudeThreshold)
-                CmdTakeGroundDamage(magnitude * damageModifier);
-        }
-    }
-
-    [Command]
-    private void CmdTakeGroundDamage(float damage)
-    {
-        TakeDamage(damage);
-    }
+    }        
 
     [TargetRpc]
     void RpcRespawn()
@@ -69,14 +81,14 @@ public class Health : NetworkBehaviour
     void OnHealthChanged(float oldHealth, float newHealth)
     {
         Debug.Log($"Health changed from {oldHealth} to {newHealth}");
-        if (health <= 0)
-            deathEffect.Play();
     }
 
+    // Called if we die and if we should destoy on death
     [Command]
-    private void Reset()
+    private void CmdDie()
     {
-        health = 100;
+        Debug.Log($"{gameObject.name} died!");
+        NetworkServer.Destroy(gameObject);
     }
 
 }
