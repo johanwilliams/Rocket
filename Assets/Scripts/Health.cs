@@ -17,7 +17,7 @@ public class Health : NetworkBehaviour
     public delegate void DiedAction();
     public event DiedAction OnDeath;
 
-    private bool isDead;
+    private bool dead = false;
 
     #region Monobeahviour
 
@@ -33,12 +33,17 @@ public class Health : NetworkBehaviour
 
     private void Update()
     {
-        if (health <= 0 && !isDead)
+        if (health <= 0 && !dead)
         {
-            isDead = true;
+            dead = true;
             if (OnDeath != null)
                 OnDeath();
         }
+    }
+
+    public bool IsDead()
+    {
+        return (health <= 0) ? true : false;
     }
 
     #endregion
@@ -46,7 +51,7 @@ public class Health : NetworkBehaviour
     public void Reset()
     {
         health = maxHealth;
-        isDead = false;
+        dead = false;
     }
 
     public void TakeDamage(float damage)
@@ -59,7 +64,7 @@ public class Health : NetworkBehaviour
 
         if (health <= 0)
         {
-            RpcRespawn();
+            //RpcRespawn();
         }
     }        
 
@@ -71,7 +76,6 @@ public class Health : NetworkBehaviour
         Reset();
     }
 
-    //TODO: Should not be in the health script but rather some player management script
     IEnumerator Respawn()
     {
         yield return new WaitForSeconds(respawnTime);

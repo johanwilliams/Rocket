@@ -338,7 +338,11 @@ MonoBehaviour:
   groundCollisionEnabled: 1
   magnitudeThreshold: 50
   damageModifier: 0.1
+  respawnTime: 5
   deathEffect: {fileID: 8923641824933876956}
+  disableGameObjectsOnDeath:
+  - {fileID: 1149496190980182012}
+  disableComponentsOnDeath: []
 --- !u!114 &7451888458821417006
 MonoBehaviour:
   m_ObjectHideFlags: 0

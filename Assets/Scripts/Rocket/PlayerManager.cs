@@ -19,10 +19,14 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] [Range(0f, 1f)] private float damageModifier = 0.1f;
 
     [Header("Death and respawn")]
+    [SerializeField] [Range(1, 5)] private float deathDuration = 3f;
+    [SerializeField] [Range(1, 5)] private float respawnDuration = 2f;
     [SerializeField] private ParticleSystem deathEffect;
+    [SerializeField] private GameObject[] disableGameObjectsOnDeath;
+    [SerializeField] private Behaviour[] disableComponentsOnDeath;
 
-    private RocketMovement rocket;
-    private RocketWeaponManager weapons;
+    private RocketMovement engine;
+    private RocketWeaponManager weaponMgmt;
     private Health health;
 
     #region MonoBehaviour api    
@@ -30,12 +34,18 @@ public class PlayerManager : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {        
-        rocket = GetComponent<RocketMovement>();
-        weapons = GetComponent<RocketWeaponManager>();        
+        engine = GetComponent<RocketMovement>();
+        weaponMgmt = GetComponent<RocketWeaponManager>();
+        health = GetComponent<Health>();        
+
+        if (isServer)
+        {
+            health.OnDeath += Die;
+        }
 
         if (isLocalPlayer)
         {
-            SetCameraFollow();
+            SetCameraFollow();            
         }
         else
         {
@@ -74,32 +84,104 @@ public class PlayerManager : NetworkBehaviour
         }
     }
 
+    [Server]
     private void Die()
     {
-        if (isServer)
-            RpcDie();
-        else
-            CmdDie();
-    }
-
-    // Called when a player dies (health <= 0)
-    [Command]
-    private void CmdDie()
-    {
-        Debug.Log($"Server: {transform.name} died!");
         RpcDie();
+        RpcDisableRocket();
+        StartCoroutine(Respawn());
+        //RpcSpawn();
     }
 
     [ClientRpc]
     private void RpcDie()
     {
-        Debug.Log($"Client: {transform.name} died!");
+        Debug.Log($"Client: {transform.name} died! Hiding the rocket and playing explosion");
 
-        //TODO: Update score
+        // Hide the rocket and turn off the collider
+        ToggleVisibility(false);
+        ToggleCollider(false);
 
         deathEffect.Play();
+    }
 
-        // StartCoroutine(Respawn());
+    [ClientRpc]
+    private void RpcDisableRocket()
+    {
+        Debug.Log($"Client: {transform.name}. Turning off all movement and weapon input");
+        // Turn off all movement and weapon input
+        engine.throttle = 0f;
+        engine.rotation = 0f;
+        weaponMgmt.SetShooting(RocketWeaponManager.Slot.Primary, false);
+        weaponMgmt.SetShooting(RocketWeaponManager.Slot.Seconday, false);
+    }
+
+    [Server]
+    IEnumerator Respawn()
+    {
+        Debug.Log($"Server: Waiting {respawnDuration} seconds for respawn");
+        yield return new WaitForSeconds(deathDuration);
+        Debug.Log($"Server: Respawning and moving transform and resetting health");
+        Transform spawnPosition = NetworkManager.startPositions[Random.Range(0, NetworkManager.startPositions.Count)];        
+        //transform.position = spawnPosition.position;
+        //transform.rotation = spawnPosition.rotation;
+        RpcSpawn(spawnPosition.position, spawnPosition.rotation);        
+        yield return new WaitForSeconds(respawnDuration);
+        RpcSpawnFX();
+        health.Reset();
+    } 
+
+    [TargetRpc]
+    private void RpcSpawn(Vector2 position, Quaternion rotation)
+    {
+        Debug.Log($"Client: {transform.name} respawning");
+
+        gameObject.transform.position = position;
+        gameObject.transform.rotation = rotation;
+        ToggleCollider(true);
+        // Unhide the rocket and turn on the collider        
+        //ToggleComponents(true);
+        //deathEffect.Play();        
+    }
+
+    [ClientRpc]
+    private void RpcSpawnFX()
+    {
+        Debug.Log($"Client: {transform.name} enabling components and spawn effect");
+        // Unhide the rocket and turn on the collider        
+        ToggleVisibility(true);
+        ToggleCollider(true);
+        deathEffect.Play();
+    }
+
+    private void ToggleVisibility(bool enabled)
+    {
+        // Components
+        foreach(Behaviour component in disableComponentsOnDeath)
+        {
+            //Debug.Log($"Component {component.name}: {enabled}");
+            component.enabled = enabled ? true : false;
+        }
+
+        // Game objects
+        foreach (GameObject gameObject in disableGameObjectsOnDeath)
+        {
+            //Debug.Log($"Game object {gameObject.name}: {enabled}");
+            gameObject.SetActive(enabled);
+        }        
+    }
+
+    private void ToggleCollider(bool enabled)
+    {
+        //Colliders
+        Collider2D _col = GetComponent<Collider2D>();
+        if (_col != null)
+        {
+            //Debug.Log($"Collider {_col.name}: {enabled}");
+            _col.enabled = enabled;
+        }
+
+
     }
 
     [Command]
@@ -113,21 +195,23 @@ public class PlayerManager : NetworkBehaviour
     public void OnThrottleChanged(InputAction.CallbackContext context)
     {
 
-        rocket.throttle = context.ReadValue<float>();
+        if (!health.IsDead())
+            engine.throttle = context.ReadValue<float>();
     }
 
     public void OnRotationChanged(InputAction.CallbackContext context)
     {
-        rocket.rotation = context.ReadValue<Vector2>().x;
+        if (!health.IsDead())
+            engine.rotation = context.ReadValue<Vector2>().x;
     }
 
     public void OnFire1Changed(InputAction.CallbackContext context)
     {
-        if (context.performed)
-            weapons.SetShooting(RocketWeaponManager.Slot.Primary, true);
+        if (context.performed && !health.IsDead())
+            weaponMgmt.SetShooting(RocketWeaponManager.Slot.Primary, true);
 
-        if (context.canceled)
-            weapons.SetShooting(RocketWeaponManager.Slot.Primary, false);
+        if (context.canceled && !health.IsDead())
+            weaponMgmt.SetShooting(RocketWeaponManager.Slot.Primary, false);
     }
 
     public void OnDebug1Changed(InputAction.CallbackContext context)
@@ -180,10 +264,7 @@ public class PlayerManager : NetworkBehaviour
         base.OnStartAuthority();
 
         UnityEngine.InputSystem.PlayerInput playerInput = GetComponent<UnityEngine.InputSystem.PlayerInput>();
-        playerInput.enabled = true;
-
-        health = GetComponent<Health>();
-        health.OnDeath += Die;
+        playerInput.enabled = true;        
     }
 
     #endregion

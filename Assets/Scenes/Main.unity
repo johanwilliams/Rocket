@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.060758352, g: 0.06523529, b: 0.08701347, a: 1}
+  m_IndirectSpecularColor: {r: 0.09987816, g: 0.1026087, b: 0.13619584, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1747,7 +1747,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.3843018, y: 1}
+    m_SensorSize: {x: 1.4, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
