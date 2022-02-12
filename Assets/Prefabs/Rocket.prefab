@@ -361,7 +361,6 @@ MonoBehaviour:
   maxHealth: 100
   health: 100
   destroyOnDeath: 0
-  respawnTime: 2
 --- !u!114 &7898031010828450007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,6 +415,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thrustForce: 200
   rotationForce: 150
+  boostModifier: 1.5
 --- !u!114 &-1620726425180420212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,8 +444,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 561161955869242743}
-        m_TargetAssemblyTypeName: Player2D, Assembly-CSharp
+      - m_Target: {fileID: 3766997271460112262}
+        m_TargetAssemblyTypeName: RocketMovement, Assembly-CSharp
         m_MethodName: OnThrottleChanged
         m_Mode: 0
         m_Arguments:
@@ -460,8 +460,8 @@ MonoBehaviour:
     m_ActionName: Rocket/Throttle
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 561161955869242743}
-        m_TargetAssemblyTypeName: Player2D, Assembly-CSharp
+      - m_Target: {fileID: 7898031010828450007}
+        m_TargetAssemblyTypeName: RocketWeaponManager, Assembly-CSharp
         m_MethodName: OnFire1Changed
         m_Mode: 0
         m_Arguments:
@@ -476,8 +476,8 @@ MonoBehaviour:
     m_ActionName: Rocket/Fire1[/DualShock4GamepadHID/buttonSouth,/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 561161955869242743}
-        m_TargetAssemblyTypeName: Player2D, Assembly-CSharp
+      - m_Target: {fileID: 3766997271460112262}
+        m_TargetAssemblyTypeName: RocketMovement, Assembly-CSharp
         m_MethodName: OnRotationChanged
         m_Mode: 0
         m_Arguments:
@@ -570,6 +570,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: a4aee526-7d24-4593-84f6-e32c693aa3b2
     m_ActionName: Rocket/Debug5[/Keyboard/5]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3766997271460112262}
+        m_TargetAssemblyTypeName: RocketMovement, Assembly-CSharp
+        m_MethodName: OnBoostChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e3a8e169-db55-45a4-86b9-fe77758b817c
+    m_ActionName: Rocket/Boost[/DualShock4GamepadHID/buttonNorth,/Keyboard/shift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Rocket

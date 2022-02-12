@@ -36,6 +36,16 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        foreach (Sound sound in sounds)
+        {            
+            sound.source.volume = sound.volume;
+            sound.source.pitch = sound.pitch;
+            sound.source.spatialBlend = sound.spatialBlend;
+        }
+    }
+
     public void Play(string name)
     {
         Sound s = GetSoundByName(name);
@@ -57,7 +67,22 @@ public class AudioManager : MonoBehaviour
             s.source.Stop();
     }
 
-    private Sound GetSoundByName(string name)
+    public void Pause(string name)
+    {
+        Sound s = GetSoundByName(name);
+        if (s != null)
+            s.source.Pause();
+    }
+
+    public bool IsPlaying(string name)
+    {
+        Sound s = GetSoundByName(name);
+        if (s != null)
+            return s.source.isPlaying;
+        return false;
+    }
+
+    public Sound GetSoundByName(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
         if (s == null)

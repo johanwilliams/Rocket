@@ -28,7 +28,7 @@ public class PlayerManager : NetworkBehaviour
     // Components we need access to
     private RocketMovement engine;
     private RocketWeaponManager weaponMgmt;
-    private Health health;
+    private Health health;    
 
     #region MonoBehaviour api    
 
@@ -238,29 +238,7 @@ public class PlayerManager : NetworkBehaviour
         health.TakeDamage(damage);
     }
 
-    #region Input Management
-
-    public void OnThrottleChanged(InputAction.CallbackContext context)
-    {
-
-        if (!health.IsDead())
-            engine.throttle = context.ReadValue<float>();
-    }
-
-    public void OnRotationChanged(InputAction.CallbackContext context)
-    {
-        if (!health.IsDead())
-            engine.rotation = context.ReadValue<Vector2>().x;
-    }
-
-    public void OnFire1Changed(InputAction.CallbackContext context)
-    {
-        if (context.performed && !health.IsDead())
-            weaponMgmt.SetShooting(RocketWeaponManager.Slot.Primary, true);
-
-        if (context.canceled && !health.IsDead())
-            weaponMgmt.SetShooting(RocketWeaponManager.Slot.Primary, false);
-    }
+    #region Input
 
     public void OnDebug1Changed(InputAction.CallbackContext context)
     {

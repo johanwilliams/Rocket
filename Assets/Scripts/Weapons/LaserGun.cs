@@ -106,6 +106,7 @@ public class LaserGun : NetworkBehaviour
     public void CmdShoot(Vector2 start, Vector2 end, Health health)
     {
         //TODO: We need to do a raycast here as well. We can't trust the client shot someone. Not just due to authority but more latency
+        // But the issue is how we do the raycast and avoid hitting ourself?
 
         if (health != null)
         {
@@ -113,26 +114,6 @@ public class LaserGun : NetworkBehaviour
         }
         RpcDrawLaser(start, end);
 
-        /*Vector2 firePoint2 = new Vector2(firePoint.position.x, firePoint.position.y);
-
-        //do a raycast to see where we hit        
-        RaycastHit2D hit = Physics2D.Raycast(firePoint.position, firePoint.up, range, hitLayers);        
-        if (hit.collider != null)
-        {
-            Debug.Log("Server: We hit something!");
-            // We hit something - draw the line
-            var health = hit.collider.gameObject.GetComponent<Health>();
-            if (health)
-            {
-                Debug.Log("Server: We hit something with health!");
-                health.TakeDamage(damage);
-            }
-            RpcDrawLaser(firePoint2, hit.point);
-
-        } else
-        {
-            RpcDrawLaser(firePoint2, firePoint.position + firePoint.up * range);
-        }*/
     }
 
     /// <summary>
