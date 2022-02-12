@@ -124,10 +124,10 @@ public class PlayerManager : NetworkBehaviour
 
         // Play death effect
         deathEffect.Play();
+        AudioManager.instance.Play("Explosion");
 
         // Turn off all movement and weapon input
-        engine.throttle = 0f;   //TODO: Better to have some engine.disable function
-        engine.rotation = 0f;
+        engine.Stop();
         weaponMgmt.SetShooting(RocketWeaponManager.Slot.Primary, false);  //TODO: Better to have some weaponMgmt.disable function
         weaponMgmt.SetShooting(RocketWeaponManager.Slot.Seconday, false);
     }

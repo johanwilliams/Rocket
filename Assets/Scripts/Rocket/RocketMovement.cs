@@ -23,6 +23,15 @@ public class RocketMovement : MonoBehaviour
         Rotate(rotation * -rotationForce);
     }
 
+    /// <summary>
+    /// Stops all movement
+    /// </summary>
+    public void Stop()
+    {
+        throttle = 0f;
+        rotation = 0f;
+    }
+
     #region Rocket movement
 
     private void ThrustForward(float amount)

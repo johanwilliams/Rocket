@@ -43,14 +43,6 @@ public class LaserGun : NetworkBehaviour
 
         if (shooting)
             Shoot();
-        /*if (!isLocalPlayer)
-            return;
-
-        if (fire1 && Time.time > timeToFire)
-        {
-            timeToFire = Time.time + 1 / fireRate;
-            Shoot();
-        }*/
     }
 
     public void SetShooting(bool isShooting)
@@ -80,6 +72,7 @@ public class LaserGun : NetworkBehaviour
                 end = hit.point;
                 health = hit.collider.gameObject.GetComponent<Health>();                
             }
+            AudioManager.instance.Play("Laser");
             StartCoroutine(LaserFlash(start, end));
             CmdShoot(start, end, health);
             timeToFire = Time.time + 1 / fireRate;
@@ -152,6 +145,7 @@ public class LaserGun : NetworkBehaviour
     void RpcDrawLaser(Vector2 start, Vector2 end)
     {
         Debug.Log("RPC: Shoot");
+        AudioManager.instance.Play("Laser");
         StartCoroutine(LaserFlash(start, end));
     }
 

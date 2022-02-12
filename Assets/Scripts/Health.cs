@@ -10,13 +10,11 @@ public class Health : NetworkBehaviour
     [SerializeField] private float health;   //TODO: Make private when we have UI to show the health
     [SerializeField] private bool destroyOnDeath = false;
 
-    //TODO: Move from Health
-    [SerializeField] private float respawnTime = 2f;    
-
     // Delegate and Action called when health reaches 0 and we die
     public delegate void DiedAction();
     public event DiedAction OnDeath;
 
+    // Internal boolean to manage that we "only die once" when health reaches 0
     private bool dead = false;
 
     #region Monobeahviour
@@ -30,7 +28,9 @@ public class Health : NetworkBehaviour
             OnDeath += CmdDie;
     }
     
-
+    /// <summary>
+    /// Checks is health is 0 (and we are not already dead). If so, triggers the OnDeatch action for others to act on
+    /// </summary>
     private void Update()
     {
         if (health <= 0 && !dead)
@@ -54,6 +54,10 @@ public class Health : NetworkBehaviour
         dead = false;
     }
 
+    /// <summary>
+    /// Only the server is allowed to deal damage
+    /// </summary>
+    /// <param name="damage"></param>
     public void TakeDamage(float damage)
     {
         if (!isServer || health <= 0)
@@ -61,38 +65,20 @@ public class Health : NetworkBehaviour
 
         health = Mathf.Clamp(health - damage, 0, maxHealth);
         Debug.Log($"{gameObject.name} took {damage} damage and now has a health of {health}");
-
-        if (health <= 0)
-        {
-            //RpcRespawn();
-        }
     }        
-
-    [TargetRpc]
-    void RpcRespawn()
-    {
-        Debug.Log("We died! Respawning");
-        StartCoroutine(Respawn());
-        Reset();
-    }
-
-    IEnumerator Respawn()
-    {
-        yield return new WaitForSeconds(respawnTime);
-        this.transform.position = NetworkManager.startPositions[Random.Range(0, NetworkManager.startPositions.Count)].position;
-    }
 
     void OnHealthChanged(float oldHealth, float newHealth)
     {
         Debug.Log($"Health changed from {oldHealth} to {newHealth}");
     }
 
-    // Called if we die and if we should destoy on death
+    /// <summary>
+    /// Called on the server to destroy this game object if configured to do so
+    /// </summary>
     [Command]
     private void CmdDie()
     {
         Debug.Log($"{gameObject.name} died!");
         NetworkServer.Destroy(gameObject);
     }
-
 }
