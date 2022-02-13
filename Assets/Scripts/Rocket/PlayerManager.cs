@@ -22,6 +22,7 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] [Range(1, 5)] private float deathDuration = 3f;
     [SerializeField] [Range(1, 5)] private float respawnDuration = 2f;
     [SerializeField] private ParticleSystem deathEffect;
+    [SerializeField] private ParticleSystem damageEffect;
     [SerializeField] private GameObject[] disableGameObjectsOnDeath;
     [SerializeField] private Behaviour[] disableComponentsOnDeath;
 
@@ -39,7 +40,9 @@ public class PlayerManager : NetworkBehaviour
     {        
         engine = GetComponent<RocketMovement>();
         weaponMgmt = GetComponent<RocketWeaponManager>();
-        health = GetComponent<Health>();        
+        health = GetComponent<Health>();
+
+        health.OnDamage += OnHealthChanged;
 
         // As the server we want to hook up to the Health component and be notified when a rocket dies
         if (isServer)
@@ -97,6 +100,21 @@ public class PlayerManager : NetworkBehaviour
         }
     }
 
+    void OnHealthChanged(float oldHealth, float newHealth)
+    {        
+        if (newHealth <= (health.maxHealth / 2f))
+        {     
+            // When damaged over 50% increase the emission rate of the damage effect
+            var ps = damageEffect.emission;
+            ps.rateOverTime = Mathf.Max(0f, (health.maxHealth / 2f - newHealth) / (health.maxHealth / 20f));
+
+            if (!damageEffect.isPlaying)
+                damageEffect.Play();
+        }
+        else if (newHealth > (health.maxHealth / 2f))
+            damageEffect.Stop();        
+    }
+
     /// <summary>
     /// Called on the server when we die. Will notify all clients of a rocket dying so they can spawn the death particle effect
     /// and disable the rocket (make it invisible and deactivate colliders).
@@ -124,6 +142,7 @@ public class PlayerManager : NetworkBehaviour
 
         // Play death effect
         deathEffect.Play();
+        damageEffect.Stop();
         AudioManager.instance.Play("Explosion");
 
         // Turn off all movement and weapon input
@@ -245,7 +264,7 @@ public class PlayerManager : NetworkBehaviour
         if (context.performed)
         {
             Debug.Log("Self destruct");
-            CmdTakeDamage(100f);
+            CmdTakeDamage(health.maxHealth);
         }
     }
 
@@ -253,7 +272,8 @@ public class PlayerManager : NetworkBehaviour
     {
         if (context.performed)
         {
-            Debug.Log("Debug action 2");
+            Debug.Log($"Take {health.maxHealth / 10f} damage");
+            CmdTakeDamage(health.maxHealth / 10f);
         }
     }
 

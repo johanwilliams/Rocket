@@ -5,12 +5,15 @@ using Mirror;
 
 public class Health : NetworkBehaviour
 {    
-    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] public float maxHealth { get; private set; } = 100f;
     [SyncVar(hook = nameof(OnHealthChanged))]
     [SerializeField] private float health;   //TODO: Make private when we have UI to show the health
     [SerializeField] private bool destroyOnDeath = false;
 
-    // Delegate and Action called when health reaches 0 and we die
+    // Delegates and Actions called when health changes and also when we die
+    public delegate void DamageAction(float oldHealth, float newHealth);
+    public event DamageAction OnDamage;
+
     public delegate void DiedAction();
     public event DiedAction OnDeath;
 
@@ -70,6 +73,7 @@ public class Health : NetworkBehaviour
     void OnHealthChanged(float oldHealth, float newHealth)
     {
         Debug.Log($"Health changed from {oldHealth} to {newHealth}");
+        OnDamage(oldHealth, newHealth);
     }
 
     /// <summary>
