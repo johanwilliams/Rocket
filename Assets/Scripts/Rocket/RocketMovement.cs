@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Health))]
 public class RocketMovement : MonoBehaviour
@@ -16,11 +17,13 @@ public class RocketMovement : MonoBehaviour
     public bool boost { get; set; } = false;
 
     private Health health;
+    private AudioSource thrusterSound;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         health = GetComponent<Health>();
+        thrusterSound = GetComponent<AudioSource>();
     }
 
     private void FixedUpdate()
@@ -30,15 +33,14 @@ public class RocketMovement : MonoBehaviour
     }
 
     private void Update()
-    {
+    {        
         float pitch = throttle * (boost ? boostModifier : 1f);
-        AudioManager.instance.GetSoundByName("Thruster").pitch = pitch;
+        thrusterSound.pitch = pitch;
 
-        if (throttle > 0 && !AudioManager.instance.IsPlaying("Thruster"))
-            AudioManager.instance.Play("Thruster");
-        if (throttle == 0 && AudioManager.instance.IsPlaying("Thruster"))
-            AudioManager.instance.Pause("Thruster");
-
+        if (throttle > 0 && !thrusterSound.isPlaying)
+            thrusterSound.Play();
+        if (throttle == 0 && thrusterSound.isPlaying)
+            thrusterSound.Pause();
     }
 
     /// <summary>
