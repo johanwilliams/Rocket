@@ -23,6 +23,7 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] [Range(1, 5)] private float deathDuration = 3f;
     [SerializeField] [Range(1, 5)] private float respawnDuration = 2f;
     [SerializeField] private ParticleSystem deathEffect;
+    [SerializeField] private ParticleSystem respawnEffect;
     [SerializeField] private ParticleSystem damageEffect;
     [SerializeField] private GameObject[] disableGameObjectsOnDeath;
     [SerializeField] private Behaviour[] disableComponentsOnDeath;
@@ -222,6 +223,7 @@ public class PlayerManager : NetworkBehaviour
         gameObject.transform.position = position;
         gameObject.transform.rotation = rotation;
         ToggleCollider(true);
+        respawnEffect.Play();
     }
 
     /// <summary>
@@ -235,8 +237,7 @@ public class PlayerManager : NetworkBehaviour
         Debug.Log($"Client: {transform.name} enabling components and spawn effect");
         // Unhide the rocket and turn on the collider        
         ToggleVisibility(true);
-        ToggleCollider(true);
-        deathEffect.Play();
+        ToggleCollider(true);        
     }
 
     /// <summary>

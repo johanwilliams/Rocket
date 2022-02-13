@@ -61,25 +61,21 @@ public class Energy : NetworkBehaviour
         return energy >= energyCost;
     }
 
+    [Command]
     /// <summary>
     /// Executed on the server when we want to consume energy
     /// </summary>
     /// <param name="energyCost">Energy we would like to consume</param>
-    /// <returns>true if successful (i.e. we had the energy to consume), false if not</returns>
-    public bool Consume(float energyCost)
+    /// <returns>true if successful (i.e. we had the energy to consume), false if not</returns>    
+    public void Consume(float energyCost)
     {
-        if (!isServer || energyCost > energy)
-            return false;
-
         regenTimer = 0f;
         energy = Mathf.Clamp(energy - energyCost, 0, maxEnergy);
         Debug.Log($"{gameObject.name} consumed {energyCost} energy and how has {energy} energy left");
-        return true;
     }        
 
     void OnEnergyChanged(float oldEnergy, float newEnergy)
     {
-        Debug.Log($"Energy changed from {oldEnergy} to {newEnergy}");
         OnChange(oldEnergy, newEnergy);
     }
 }

@@ -82,15 +82,13 @@ public class Health : NetworkBehaviour
         dead = false;
     }
 
+    [Server]
     /// <summary>
     /// Only the server is allowed to deal damage
     /// </summary>
     /// <param name="damage"></param>
     public void TakeDamage(float damage)
     {
-        if (!isServer || health <= 0)
-            return;
-
         regenTimer = 0f;
         health = Mathf.Clamp(health - damage, 0, maxHealth);
         Debug.Log($"{gameObject.name} took {damage} damage and now has a health of {health}");
@@ -98,7 +96,6 @@ public class Health : NetworkBehaviour
 
     void OnHealthChanged(float oldHealth, float newHealth)
     {
-        Debug.Log($"Health changed from {oldHealth} to {newHealth}");
         OnDamage(oldHealth, newHealth);
     }
 

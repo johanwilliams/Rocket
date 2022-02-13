@@ -1,14 +1,20 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mirror;
 
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Health))]
-public class RocketMovement : MonoBehaviour
+[RequireComponent(typeof(Energy))]
+public class RocketMovement : NetworkBehaviour
 {
+    [Header("Rocket movement")]
     [SerializeField] private float thrustForce = 200.0f;
     [SerializeField] private float rotationForce = 150f;
+
+    [Header("Rocket boost")]
     [SerializeField] [Range(0f, 3f)] private float boostModifier = 1.5f;
+    [SerializeField] [Range(0f, 50f)] private float boostEnergyCost = 30f;
 
     private Rigidbody2D rb;
     public float rotation { get; set; }
@@ -17,12 +23,14 @@ public class RocketMovement : MonoBehaviour
     public bool boost { get; set; } = false;
 
     private Health health;
+    private Energy energy;
     private AudioSource thrusterSound;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         health = GetComponent<Health>();
+        energy = GetComponent<Energy>();
         thrusterSound = GetComponent<AudioSource>();
     }
 
@@ -33,7 +41,18 @@ public class RocketMovement : MonoBehaviour
     }
 
     private void Update()
-    {        
+    {       
+        // For the local player bossting, check if we afford the energy cost and consume it. If not disable boost.
+        if (isLocalPlayer && boost && throttle > 0f)
+        {
+            float energyNeeded = Time.deltaTime * boostEnergyCost;
+            if (energy.CanConsume(energyNeeded))
+                energy.Consume(energyNeeded);
+            else
+                boost = false;
+        }
+
+        
         float pitch = throttle * (boost ? boostModifier : 1f);
         thrusterSound.pitch = pitch;
 
