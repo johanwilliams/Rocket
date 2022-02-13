@@ -46,7 +46,7 @@ public class RocketMovement : MonoBehaviour
     /// <summary>
     /// Stops all movement
     /// </summary>
-    public void Stop()
+    public void Disable()
     {
         throttle = 0f;
         rotation = 0f;

@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using Mirror;
 
 [RequireComponent(typeof(Health))]
+[RequireComponent(typeof(Energy))]
 public class RocketWeaponManager : NetworkBehaviour
 {
     public enum Slot { Primary, Seconday };
@@ -10,21 +11,28 @@ public class RocketWeaponManager : NetworkBehaviour
     //TODO: This should be a prefab attached to a weaponslot of the weapon manager
     private LaserGun laserGun;
     private Health health;
+    private Energy energy;
+
+    private bool primaryActive = false;
 
     private void Start()
     {
         laserGun = GetComponent<LaserGun>();
         health = GetComponent<Health>();
+        energy = GetComponent<Energy>();
+    }    
+
+    public void Disable()
+    {
+        primaryActive = false;
     }
 
-    public void SetShooting(Slot slot, bool isShooting)
+    private void Update()
     {
-        if (slot == Slot.Primary)
+        if (isLocalPlayer && primaryActive && laserGun.CanShoot() && energy.CanConsume(laserGun.energyCost))
         {
-            laserGun.SetShooting(isShooting);
-        } else if (slot == Slot.Seconday)
-        {
-
+            energy.Consume(laserGun.energyCost);
+            laserGun.Shoot();
         }
     }
 
@@ -33,13 +41,15 @@ public class RocketWeaponManager : NetworkBehaviour
     public void OnFire1Changed(InputAction.CallbackContext context)
     {
         if (context.performed && !health.IsDead())
-            SetShooting(RocketWeaponManager.Slot.Primary, true);
+            primaryActive = true;
 
         if (context.canceled && !health.IsDead())
-            SetShooting(RocketWeaponManager.Slot.Primary, false);
+            primaryActive = false;
     }
 
-    #endregion
+    #endregion    
+
+    
 
 
 }

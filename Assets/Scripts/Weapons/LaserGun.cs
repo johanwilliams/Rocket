@@ -9,6 +9,7 @@ public class LaserGun : NetworkBehaviour
     [SerializeField] private float damage = 10f;    
     [SerializeField] private float range = 100.0f;
     [SerializeField] [Range(0f, 0.2f)] private float spread = 0.05f;
+    [SerializeField] public float energyCost { get; private set; } = 5.0f;
 
     [SerializeField] private LayerMask hitLayers;
     [SerializeField] private ParticleSystem muzzleFlashParticleSystem;
@@ -50,6 +51,11 @@ public class LaserGun : NetworkBehaviour
         shooting = isShooting;
     }
 
+    public bool CanShoot()
+    {
+        return Time.time > timeToFire || fireRate == 0;
+    }
+
     [Client]
     /// <summary>
     /// Shoot method for the local player. This to avoid the lag of going to the server and back and then render the shot (which will not look good).
@@ -57,7 +63,7 @@ public class LaserGun : NetworkBehaviour
     /// </summary>
     public void Shoot()
     {
-        if (Time.time > timeToFire || fireRate == 0) { 
+        if (CanShoot()) { 
             Debug.Log("Client: Shoot");
 
             Vector3 direction = GetDirection();

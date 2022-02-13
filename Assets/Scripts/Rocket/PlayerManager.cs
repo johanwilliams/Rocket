@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(RocketMovement))]
 [RequireComponent(typeof(RocketWeaponManager))]
 [RequireComponent(typeof(Health))]
+[RequireComponent(typeof(Energy))]
 public class PlayerManager : NetworkBehaviour
 {        
 
@@ -27,10 +28,14 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] private Behaviour[] disableComponentsOnDeath;
     [SerializeField] private Healthbar healthbar;
 
+    [Header("Energy")]
+    [SerializeField] private Energybar energybar;
+
     // Components we need access to
     private RocketMovement engine;
     private RocketWeaponManager weaponMgmt;
-    private Health health;    
+    private Health health;
+    private Energy energy;
 
     #region MonoBehaviour api    
 
@@ -41,9 +46,11 @@ public class PlayerManager : NetworkBehaviour
     {        
         engine = GetComponent<RocketMovement>();
         weaponMgmt = GetComponent<RocketWeaponManager>();
-        health = GetComponent<Health>();        
+        health = GetComponent<Health>();
+        energy = GetComponent<Energy>();
 
         health.OnDamage += OnHealthChanged;
+        energy.OnChange += OnEnergyChanged;
 
         // As the server we want to hook up to the Health component and be notified when a rocket dies
         if (isServer)
@@ -55,8 +62,12 @@ public class PlayerManager : NetworkBehaviour
         if (isLocalPlayer)
         {
             SetCameraFollow();
+            
             healthbar = GameObject.FindObjectOfType<Healthbar>();
             healthbar.SetMaxHealth(health.maxHealth);
+
+            energybar = GameObject.FindObjectOfType<Energybar>();
+            energybar.SetMaxEnergy(energy.maxEnergy);
         }
         else
         {
@@ -119,10 +130,17 @@ public class PlayerManager : NetworkBehaviour
 
         if (isLocalPlayer)
         {
-            Debug.Log("Updating health bar");
             healthbar.SetHealth(newHealth);
         }
             
+    }
+
+    void OnEnergyChanged(float oldEnergy, float newEnergy)
+    {
+        if (isLocalPlayer)
+        {
+            energybar.SetEnergy(newEnergy);
+        }
     }
 
     /// <summary>
@@ -155,10 +173,9 @@ public class PlayerManager : NetworkBehaviour
         damageEffect.Stop();
         AudioManager.instance.Play("Explosion");
 
-        // Turn off all movement and weapon input
-        engine.Stop();
-        weaponMgmt.SetShooting(RocketWeaponManager.Slot.Primary, false);  //TODO: Better to have some weaponMgmt.disable function
-        weaponMgmt.SetShooting(RocketWeaponManager.Slot.Seconday, false);
+        // Disable all movement and weapon input. No moving or shooting if you are dead!
+        engine.Disable();
+        weaponMgmt.Disable();
     }
 
     /// <summary>
@@ -187,6 +204,7 @@ public class PlayerManager : NetworkBehaviour
         yield return new WaitForSeconds(respawnDuration);
         RpcRespawnAll();
         health.Reset();
+        energy.Reset();
     } 
 
     /// <summary>

@@ -10,7 +10,7 @@ public class Health : NetworkBehaviour
     
     [SyncVar(hook = nameof(OnHealthChanged))]    
     [SerializeField] 
-    private float health;   //TODO: Make private when we have UI to show the health
+    private float health;
     
     [SerializeField]
     [Range(0f, 10f)]
