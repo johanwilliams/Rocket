@@ -346,6 +346,7 @@ MonoBehaviour:
   disableGameObjectsOnDeath:
   - {fileID: 1149496190980182012}
   disableComponentsOnDeath: []
+  healthbar: {fileID: 0}
 --- !u!114 &7451888458821417006
 MonoBehaviour:
   m_ObjectHideFlags: 0

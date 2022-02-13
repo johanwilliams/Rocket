@@ -25,6 +25,7 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] private ParticleSystem damageEffect;
     [SerializeField] private GameObject[] disableGameObjectsOnDeath;
     [SerializeField] private Behaviour[] disableComponentsOnDeath;
+    [SerializeField] private Healthbar healthbar;
 
     // Components we need access to
     private RocketMovement engine;
@@ -40,7 +41,7 @@ public class PlayerManager : NetworkBehaviour
     {        
         engine = GetComponent<RocketMovement>();
         weaponMgmt = GetComponent<RocketWeaponManager>();
-        health = GetComponent<Health>();
+        health = GetComponent<Health>();        
 
         health.OnDamage += OnHealthChanged;
 
@@ -53,7 +54,9 @@ public class PlayerManager : NetworkBehaviour
         // Activate the camera follow on the local player
         if (isLocalPlayer)
         {
-            SetCameraFollow();            
+            SetCameraFollow();
+            healthbar = GameObject.FindObjectOfType<Healthbar>();
+            healthbar.SetMaxHealth(health.maxHealth);
         }
         else
         {
@@ -112,7 +115,14 @@ public class PlayerManager : NetworkBehaviour
                 damageEffect.Play();
         }
         else if (newHealth > (health.maxHealth / 2f))
-            damageEffect.Stop();        
+            damageEffect.Stop();
+
+        if (isLocalPlayer)
+        {
+            Debug.Log("Updating health bar");
+            healthbar.SetHealth(newHealth);
+        }
+            
     }
 
     /// <summary>
