@@ -5,10 +5,25 @@ using Mirror;
 
 public class Health : NetworkBehaviour
 {    
-    [SerializeField] public float maxHealth { get; private set; } = 100f;
-    [SyncVar(hook = nameof(OnHealthChanged))]
-    [SerializeField] private float health;   //TODO: Make private when we have UI to show the health
-    [SerializeField] private bool destroyOnDeath = false;
+    [SerializeField]    
+    public float maxHealth { get; private set; } = 100f;
+    
+    [SyncVar(hook = nameof(OnHealthChanged))]    
+    [SerializeField] 
+    private float health;   //TODO: Make private when we have UI to show the health
+    
+    [SerializeField]
+    [Range(0f, 10f)]
+    [Tooltip("HP regenerated per second")] 
+    private float regen = 0f;
+    
+    [SerializeField]
+    [Range(0f, 60f)]
+    [Tooltip("Time in seconds until regeneration starts from last taking damage")]
+    private float regenDelay = 10f;
+    
+    [SerializeField] 
+    private bool destroyOnDeath = false;
 
     // Delegates and Actions called when health changes and also when we die
     public delegate void DamageAction(float oldHealth, float newHealth);
@@ -19,6 +34,8 @@ public class Health : NetworkBehaviour
 
     // Internal boolean to manage that we "only die once" when health reaches 0
     private bool dead = false;
+
+    private float regenTimer = 0f;
 
     #region Monobeahviour
 
@@ -41,6 +58,14 @@ public class Health : NetworkBehaviour
             dead = true;
             if (OnDeath != null)
                 OnDeath();
+        }
+
+        // If health regeneration is enabled
+        if (isServer && regen > 0)
+        {
+            regenTimer += Time.deltaTime;
+            if (regenTimer >= regenDelay && health < maxHealth)
+                health = Mathf.Clamp(health + Time.deltaTime * regen, 0, maxHealth);
         }
     }
 
@@ -66,6 +91,7 @@ public class Health : NetworkBehaviour
         if (!isServer || health <= 0)
             return;
 
+        regenTimer = 0f;
         health = Mathf.Clamp(health - damage, 0, maxHealth);
         Debug.Log($"{gameObject.name} took {damage} damage and now has a health of {health}");
     }        
