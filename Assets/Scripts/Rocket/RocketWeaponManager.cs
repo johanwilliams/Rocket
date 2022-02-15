@@ -34,7 +34,6 @@ public class RocketWeaponManager : NetworkBehaviour
     {
         if (isLocalPlayer && primaryActive && laserGun.CanShoot() && energy.CanConsume(laserGun.energyCost))
         {
-            //CmdConsumeEnergy(laserGun.energyCost);
             energy.Consume(laserGun.energyCost);
             laserGun.Shoot();
             rocket.AddForce(-rocket.transform.up, laserGun.recoil * rocket.thrustForce);

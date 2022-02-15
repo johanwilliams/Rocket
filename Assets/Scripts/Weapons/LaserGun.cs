@@ -19,9 +19,7 @@ public class LaserGun : NetworkBehaviour
     [SerializeField] private TrailRenderer laserTrail;
 
     private float timeToFire = 0;
-    private bool shooting = false;    
-
-
+    private bool shooting = false;
 
     #region NetworkBehaviour api    
 
@@ -81,7 +79,7 @@ public class LaserGun : NetworkBehaviour
             }
             AudioManager.instance.Play("Laser");
             StartCoroutine(LaserFlash(start, end));
-            CmdShoot(start, end, health);
+            CmdShoot(direction);
             timeToFire = Time.time + 1 / fireRate;
         }
 
@@ -103,24 +101,24 @@ public class LaserGun : NetworkBehaviour
 
         return direction;
     }
-
-    /// <summary>
-    /// Server shoot method. 
-    /// Makes a raycast to find a hitpoint and if so renders the shot. Also checks if what we hit has a <see cref="Health"/> and in that case calls it to take damage.
-    /// Makes an RPC call to all clients but the owner to render the shot (as the owner already has rendered it locally)
-    /// </summary>
+    
     [Command]
-    public void CmdShoot(Vector2 start, Vector2 end, Health health)
+    public void CmdShoot(Vector3 direction)
     {
-        //TODO: We need to do a raycast here as well. We can't trust the client shot someone. Not just due to authority but more latency
-        // But the issue is how we do the raycast and avoid hitting ourself?
+        Vector2 end = firePoint.position + direction * range;
 
-        if (health != null)
+        RaycastHit2D hit = Physics2D.Raycast(firePoint.position, direction, range, hitLayers);
+        if (hit.collider != null)
         {
-            health.TakeDamage(damage);
+            end = hit.point;
+            Health health = hit.collider.gameObject.GetComponent<Health>();
+            if (health != null)
+            {
+                health.TakeDamage(damage);
+            }
         }
-        RpcDrawLaser(start, end);
 
+        RpcDrawLaser(firePoint.position, end);
     }
 
     /// <summary>

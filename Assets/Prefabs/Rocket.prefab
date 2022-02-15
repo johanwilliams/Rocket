@@ -5265,6 +5265,7 @@ MonoBehaviour:
   damage: 40
   range: 200
   spread: 0.05
+  recoil: 5
   hitLayers:
     serializedVersion: 2
     m_Bits: 640
@@ -5287,8 +5288,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  thrustForce: 200
   rotationForce: 150
+  thrustForce: 200
   boostModifier: 1.5
   boostEnergyCost: 20
   thrusterFlame: {fileID: 1151594003703057466}
@@ -10416,10 +10417,50 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1238845427}
     m_Modifications:
+    - target: {fileID: 8723619841409406780, guid: 57bf8207efdf3014791e853c3f8ce9e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8723717155120030294, guid: 57bf8207efdf3014791e853c3f8ce9e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8723802945828915754, guid: 57bf8207efdf3014791e853c3f8ce9e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8723852115473459302, guid: 57bf8207efdf3014791e853c3f8ce9e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8724470916467271890, guid: 57bf8207efdf3014791e853c3f8ce9e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8724508563962357354, guid: 57bf8207efdf3014791e853c3f8ce9e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8725276520384040468, guid: 57bf8207efdf3014791e853c3f8ce9e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8725283065229707598, guid: 57bf8207efdf3014791e853c3f8ce9e4,
         type: 3}
       propertyPath: m_Name
       value: BigExplosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 8725283065229707598, guid: 57bf8207efdf3014791e853c3f8ce9e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8726290211363131586, guid: 57bf8207efdf3014791e853c3f8ce9e4,
         type: 3}
@@ -10566,6 +10607,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SmokeEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 2081257940408101650, guid: 3cfa9fb0cad358e44ba11c0ce1f89015,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2087030493222849754, guid: 3cfa9fb0cad358e44ba11c0ce1f89015,
         type: 3}
@@ -10722,6 +10768,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Respawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 3759683722096579574, guid: 8ccf046af88b0d743af0966e04b92114,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4060608411844523170, guid: 8ccf046af88b0d743af0966e04b92114,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4464368437044063195, guid: 8ccf046af88b0d743af0966e04b92114,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ccf046af88b0d743af0966e04b92114, type: 3}
