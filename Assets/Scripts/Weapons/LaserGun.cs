@@ -9,6 +9,7 @@ public class LaserGun : NetworkBehaviour
     [SerializeField] private float damage = 10f;    
     [SerializeField] private float range = 100.0f;
     [SerializeField] [Range(0f, 0.2f)] private float spread = 0.05f;
+    [SerializeField] [Range(0f, 10f)] public float recoil = 5f;
     [SerializeField] public float energyCost { get; private set; } = 5.0f;
 
     [SerializeField] private LayerMask hitLayers;

@@ -4,6 +4,7 @@ using Mirror;
 
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(Energy))]
+[RequireComponent(typeof(RocketMovement))]
 public class RocketWeaponManager : NetworkBehaviour
 {
     public enum Slot { Primary, Seconday };
@@ -12,6 +13,7 @@ public class RocketWeaponManager : NetworkBehaviour
     private LaserGun laserGun;
     private Health health;
     private Energy energy;
+    private RocketMovement rocket;
 
     private bool primaryActive = false;
 
@@ -20,6 +22,7 @@ public class RocketWeaponManager : NetworkBehaviour
         laserGun = GetComponent<LaserGun>();
         health = GetComponent<Health>();
         energy = GetComponent<Energy>();
+        rocket = GetComponent<RocketMovement>();
     }    
 
     public void Disable()
@@ -34,6 +37,7 @@ public class RocketWeaponManager : NetworkBehaviour
             //CmdConsumeEnergy(laserGun.energyCost);
             energy.Consume(laserGun.energyCost);
             laserGun.Shoot();
+            rocket.AddForce(-rocket.transform.up, laserGun.recoil * rocket.thrustForce);
         }
     }
 

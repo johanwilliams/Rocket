@@ -6,7 +6,7 @@
             "id": "eb09ac9e-17aa-4d2c-acc5-7afd442e1423",
             "actions": [
                 {
-                    "name": "Throttle",
+                    "name": "Thruster",
                     "type": "Value",
                     "id": "9cbd559b-cc03-4414-ae38-f069299fe687",
                     "expectedControlType": "Axis",
@@ -95,7 +95,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Throttle",
+                    "action": "Thruster",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -106,7 +106,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Throttle",
+                    "action": "Thruster",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -117,7 +117,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Throttle",
+                    "action": "Thruster",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },

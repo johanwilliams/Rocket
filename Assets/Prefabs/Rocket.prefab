@@ -5293,6 +5293,7 @@ MonoBehaviour:
   boostEnergyCost: 20
   thrusterFlame: {fileID: 1151594003703057466}
   thrusterBoostFlame: {fileID: 6699938878357441269}
+  rotationValue: 0
 --- !u!114 &-1620726425180420212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5323,7 +5324,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3766997271460112262}
         m_TargetAssemblyTypeName: RocketMovement, Assembly-CSharp
-        m_MethodName: OnThrottleChanged
+        m_MethodName: OnThrusterInputChanged
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5355,7 +5356,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3766997271460112262}
         m_TargetAssemblyTypeName: RocketMovement, Assembly-CSharp
-        m_MethodName: OnRotationChanged
+        m_MethodName: OnRotationInputChanged
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5451,7 +5452,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3766997271460112262}
         m_TargetAssemblyTypeName: RocketMovement, Assembly-CSharp
-        m_MethodName: OnBoostChanged
+        m_MethodName: OnBoostInputChanged
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
