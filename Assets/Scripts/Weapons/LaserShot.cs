@@ -5,12 +5,11 @@ using Mirror;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class LaserShot : NetworkBehaviour
-{
-
-    public float destroyAfter = 2;
-    public Rigidbody2D rigidBody;
-    public float force = 1000;
+{    
+    private Rigidbody2D rigidBody;    
     private uint shooter;
+    private float destroyAfter;
+    private float force;
 
     private void Start()
     {
@@ -20,25 +19,21 @@ public class LaserShot : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        Invoke(nameof(DestroySelf), destroyAfter);
+        if (destroyAfter > 0)
+            Invoke(nameof(DestroySelf), destroyAfter);
     }
 
-    public void Init(uint shooterNetId)
+    public void Init(uint shooterNetId, float _destroyAfter, float _force)
     {
-        Debug.Log($"Setting shooter of lasershot to player {shooterNetId}");
+        destroyAfter = _destroyAfter;
         shooter = shooterNetId;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+        force = _force;
+    }    
 
     // destroy for everyone on the server
     [Server]
     void DestroySelf()
-    {
+    {        
         NetworkServer.Destroy(gameObject);
     }
     
@@ -69,11 +64,14 @@ public class LaserShot : NetworkBehaviour
             NetworkIdentity networkIdentity = go.GetComponent<NetworkIdentity>();
             if (networkIdentity != null && networkIdentity.netId == shooter)
             {
-                Debug.Log($"COLLIDING with SELF");
+                Debug.Log($"Colliding with own gameObject - Ignoring...");
                 return;
             }
             health.TakeDamage(40f);
-        }            
+        }
+
+        //Instantiate impact particle system through RPC call
+        //Instantiate(impactParticleSystem, end3, Quaternion.LookRotation(hit.normal));
 
         DestroySelf();        
     }

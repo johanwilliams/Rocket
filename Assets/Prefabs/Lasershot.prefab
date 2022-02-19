@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7537191812997183511}
-  - component: {fileID: 5408548626193017404}
   - component: {fileID: 6998868713154650818}
   - component: {fileID: 4422790304021015168}
   - component: {fileID: 6926332401659893642}
   - component: {fileID: 592326952544972168}
   - component: {fileID: 5817784635953379342}
+  - component: {fileID: 5408548626193017404}
   m_Layer: 0
   m_Name: Lasershot
   m_TagString: Untagged
@@ -38,23 +38,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5408548626193017404
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6186455950725803822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc6675a8e4373c4429fb1829d1774990, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  destroyAfter: 2
-  rigidBody: {fileID: 0}
-  force: 8000
 --- !u!58 &6998868713154650818
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -239,6 +222,20 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &5408548626193017404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6186455950725803822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6675a8e4373c4429fb1829d1774990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!1001 &4275139844991227133
 PrefabInstance:
   m_ObjectHideFlags: 0

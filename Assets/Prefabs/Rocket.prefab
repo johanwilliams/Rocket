@@ -5012,7 +5012,6 @@ GameObject:
   - component: {fileID: 7451888458821417006}
   - component: {fileID: -7622665779099892631}
   - component: {fileID: 7898031010828450007}
-  - component: {fileID: 8870855014732611167}
   - component: {fileID: 3766997271460112262}
   - component: {fileID: -1620726425180420212}
   - component: {fileID: 5066997710604296717}
@@ -5248,35 +5247,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  projectilePrefab: {fileID: 6186455950725803822, guid: 61e249fcfb221e7468120bc24fa89668,
-    type: 3}
   lasergunPrefab: {fileID: 3227106064140533508, guid: 42d5300e459017747b29844644dd8e6c,
     type: 3}
   equippedWeapon: 0
   weaponMountPoint: {fileID: 5012786997660822149}
---- !u!114 &8870855014732611167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7905677300391368649}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d378e48306c56f84c858cf8a617e30ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireRate: 3
-  range: 200
-  recoil: 5
-  hitLayers:
-    serializedVersion: 2
-    m_Bits: 640
-  muzzleFlashParticleSystem: {fileID: 0}
-  firePoint: {fileID: 4616202410175028805}
-  impactParticleSystem: {fileID: 0}
-  laserTrail: {fileID: 250305730072771072, guid: 6c8790a8906b87e43bff256ae2d13837,
-    type: 3}
 --- !u!114 &3766997271460112262
 MonoBehaviour:
   m_ObjectHideFlags: 0
