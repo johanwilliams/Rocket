@@ -36,27 +36,22 @@ public class LaserShot : NetworkBehaviour
     {        
         NetworkServer.Destroy(gameObject);
     }
-    
-/*    [ServerCallback]
-    void OnTriggerEnter2D(Collider2D co)
-    {
-        Debug.Log($"COLLIDING with {co.gameObject.name}");
-        NetworkServer.Destroy(gameObject);
-    }*/
+
+
 
     // ServerCallback because we don't want a warning
     // if OnCollisionEnter2D is called on the client
     [ServerCallback]
-    private void OnTriggerEnter2D(Collider2D collider)
+    void OnCollisionEnter2D(Collision2D col)
     {
         // Only check for a hit and deal damage on the server
         if (!isServer)
             return;
 
-        Debug.Log($"Lasershot hitting {collider.gameObject.name}");
+        Debug.Log($"Lasershot hitting {col.gameObject.name}");
         
         // See if we hit something with health
-        GameObject go = collider.gameObject;
+        GameObject go = col.gameObject;
         Health health = go.GetComponent<Health>();
 
         if (health != null)

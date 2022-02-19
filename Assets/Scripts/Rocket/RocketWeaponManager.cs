@@ -9,7 +9,6 @@ public enum EquippedWeapon : byte
     lasergun
 }
 
-
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(Energy))]
 [RequireComponent(typeof(RocketMovement))]
@@ -40,12 +39,11 @@ public class RocketWeaponManager : NetworkBehaviour
         energy = GetComponent<Energy>();
         rocket = GetComponent<RocketMovement>();
         playerManager = GetComponent<PlayerManager>();
-    }
 
-    public override void OnStartServer()
-    {
-        CmdChangeEquippedWeapon(EquippedWeapon.lasergun);
+        if (isLocalPlayer)
+            CmdChangeEquippedWeapon(EquippedWeapon.lasergun);
     }
+    
 
     public void Disable()
     {
