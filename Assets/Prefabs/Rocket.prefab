@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1238845427}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: RocketFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3278987381437089424}
   - component: {fileID: 2039222259917430669}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: ShipSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6008117135067085186}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Thuster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 6313532242456400600}
   - component: {fileID: 6699938878357441269}
   - component: {fileID: 6560389598386595391}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: BoostFlame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4972,8 +4972,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4616202410175028805}
-  m_Layer: 6
-  m_Name: Lasergun
+  m_Layer: 7
+  m_Name: WeaponMountPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4987,7 +4987,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5012786997660822149}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.44, z: 0}
+  m_LocalPosition: {x: 0, y: 1.41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5016,7 +5016,7 @@ GameObject:
   - component: {fileID: 3766997271460112262}
   - component: {fileID: -1620726425180420212}
   - component: {fileID: 5066997710604296717}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Rocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5184,7 +5184,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  remoteLayerName: PlayerRemote
+  layerPlayerLocal: PlayerLocal
+  layerPlayerRemote: PlayerRemote
   groundCollisionEnabled: 1
   magnitudeThreshold: 50
   damageModifier: 0.1
@@ -5247,6 +5248,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  projectilePrefab: {fileID: 6186455950725803822, guid: 61e249fcfb221e7468120bc24fa89668,
+    type: 3}
+  lasergunPrefab: {fileID: 3227106064140533508, guid: 42d5300e459017747b29844644dd8e6c,
+    type: 3}
+  equippedWeapon: 0
+  weaponMountPoint: {fileID: 5012786997660822149}
 --- !u!114 &8870855014732611167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5259,12 +5266,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d378e48306c56f84c858cf8a617e30ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   fireRate: 3
-  damage: 40
   range: 200
-  spread: 0.05
   recoil: 5
   hitLayers:
     serializedVersion: 2
@@ -5403,8 +5406,8 @@ MonoBehaviour:
     m_ActionName: Rocket/Debug2[/Keyboard/2]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 561161955869242743}
-        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+      - m_Target: {fileID: 7898031010828450007}
+        m_TargetAssemblyTypeName: RocketWeaponManager, Assembly-CSharp
         m_MethodName: OnDebug3Changed
         m_Mode: 0
         m_Arguments:
@@ -5419,8 +5422,8 @@ MonoBehaviour:
     m_ActionName: Rocket/Debug3[/Keyboard/3]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 561161955869242743}
-        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+      - m_Target: {fileID: 7898031010828450007}
+        m_TargetAssemblyTypeName: RocketWeaponManager, Assembly-CSharp
         m_MethodName: OnDebug4Changed
         m_Mode: 0
         m_Arguments:
@@ -5435,8 +5438,8 @@ MonoBehaviour:
     m_ActionName: Rocket/Debug4[/Keyboard/4]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 561161955869242743}
-        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+      - m_Target: {fileID: 7898031010828450007}
+        m_TargetAssemblyTypeName: RocketWeaponManager, Assembly-CSharp
         m_MethodName: OnDebug5Changed
         m_Mode: 0
         m_Arguments:
@@ -5575,7 +5578,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6642512285225923746}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5609,7 +5612,7 @@ GameObject:
   - component: {fileID: 4989624199975372170}
   - component: {fileID: 1151594003703057466}
   - component: {fileID: 3177522626911471138}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Flame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10420,37 +10423,37 @@ PrefabInstance:
     - target: {fileID: 8723619841409406780, guid: 57bf8207efdf3014791e853c3f8ce9e4,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8723717155120030294, guid: 57bf8207efdf3014791e853c3f8ce9e4,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8723802945828915754, guid: 57bf8207efdf3014791e853c3f8ce9e4,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8723852115473459302, guid: 57bf8207efdf3014791e853c3f8ce9e4,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8724470916467271890, guid: 57bf8207efdf3014791e853c3f8ce9e4,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8724508563962357354, guid: 57bf8207efdf3014791e853c3f8ce9e4,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8725276520384040468, guid: 57bf8207efdf3014791e853c3f8ce9e4,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8725283065229707598, guid: 57bf8207efdf3014791e853c3f8ce9e4,
         type: 3}
@@ -10460,7 +10463,7 @@ PrefabInstance:
     - target: {fileID: 8725283065229707598, guid: 57bf8207efdf3014791e853c3f8ce9e4,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8726290211363131586, guid: 57bf8207efdf3014791e853c3f8ce9e4,
         type: 3}
@@ -10611,7 +10614,7 @@ PrefabInstance:
     - target: {fileID: 2081257940408101650, guid: 3cfa9fb0cad358e44ba11c0ce1f89015,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2087030493222849754, guid: 3cfa9fb0cad358e44ba11c0ce1f89015,
         type: 3}
@@ -10772,17 +10775,17 @@ PrefabInstance:
     - target: {fileID: 3759683722096579574, guid: 8ccf046af88b0d743af0966e04b92114,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4060608411844523170, guid: 8ccf046af88b0d743af0966e04b92114,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4464368437044063195, guid: 8ccf046af88b0d743af0966e04b92114,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ccf046af88b0d743af0966e04b92114, type: 3}

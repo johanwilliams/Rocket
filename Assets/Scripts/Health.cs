@@ -82,7 +82,7 @@ public class Health : NetworkBehaviour
         dead = false;
     }
 
-    [Server]
+    [Server]    
     /// <summary>
     /// Only the server is allowed to deal damage
     /// </summary>

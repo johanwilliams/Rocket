@@ -1,14 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 
-public class LaserGun : NetworkBehaviour
+public class LaserGun : MonoBehaviour
 {
     [SerializeField] private float fireRate = 0;
-    [SerializeField] private float damage = 10f;    
+    [SerializeField] public float damage { get; private set; } = 10f;    
     [SerializeField] private float range = 100.0f;
-    [SerializeField] [Range(0f, 0.2f)] private float spread = 0.05f;
     [SerializeField] [Range(0f, 10f)] public float recoil = 5f;
     [SerializeField] public float energyCost { get; private set; } = 5.0f;
 
@@ -19,19 +17,7 @@ public class LaserGun : NetworkBehaviour
     [SerializeField] private TrailRenderer laserTrail;
 
     private float timeToFire = 0;
-    private bool shooting = false;
 
-    #region NetworkBehaviour api    
-
-    public override void OnStartServer()
-    {
-        //rb.isKinematic = false;
-    }
-
-    #endregion
-
-
-    [Client]
     /// <summary>
     /// Run for the local player. 
     /// Check is we can fire (either single fire or burst).
@@ -40,14 +26,6 @@ public class LaserGun : NetworkBehaviour
     void Update()
     {
         Debug.DrawLine(firePoint.position, firePoint.position + firePoint.up * range, Color.gray);
-
-        if (shooting)
-            Shoot();
-    }
-
-    public void SetShooting(bool isShooting)
-    {
-        shooting = isShooting;
     }
 
     public bool CanShoot()
@@ -55,84 +33,42 @@ public class LaserGun : NetworkBehaviour
         return Time.time > timeToFire || fireRate == 0;
     }
 
-    [Client]
     /// <summary>
     /// Shoot method for the local player. This to avoid the lag of going to the server and back and then render the shot (which will not look good).
     /// Makes a raycast to find a hitpoint and if so renders the shot.
     /// </summary>
     public void Shoot()
-    {
-        if (CanShoot()) { 
-            Debug.Log("Client: Shoot");
+    {           
+        //do a raycast to see where we hit        
+        //RaycastHit2D hit = Physics2D.Raycast(firePoint.position, firePoint.up, range, hitLayers);
+                        
+        // Update shottimer
+        timeToFire = Time.time + 1 / fireRate;
 
-            Vector3 direction = GetDirection();
-            Vector2 start = firePoint.position;
-            Vector2 end = firePoint.position + direction * range;
-
-            //do a raycast to see where we hit        
-            RaycastHit2D hit = Physics2D.Raycast(start, direction, range, hitLayers);
-            Health health = null;
-            if (hit.collider != null)
-            {
-                end = hit.point;
-                health = hit.collider.gameObject.GetComponent<Health>();                
-            }
-            AudioManager.instance.Play("Laser");
-            StartCoroutine(LaserFlash(start, end));
-            CmdShoot(direction);
-            timeToFire = Time.time + 1 / fireRate;
-        }
-
-        // If tap/single fire
-        if (fireRate == 0)
-            shooting = false;
-    }
-
-    private Vector3 GetDirection()
-    {
-        Vector3 direction = firePoint.up;        
-
-        direction += new Vector3(
-            Random.Range(-spread, spread),
-            Random.Range(-spread, spread),
-            0
-            );
-        direction.Normalize();
-
-        return direction;
-    }
+        //return hit.collider;
+    }    
     
-    [Command]
-    public void CmdShoot(Vector3 direction)
-    {
-        Vector2 end = firePoint.position + direction * range;
-
-        RaycastHit2D hit = Physics2D.Raycast(firePoint.position, direction, range, hitLayers);
-        if (hit.collider != null)
-        {
-            end = hit.point;
-            Health health = hit.collider.gameObject.GetComponent<Health>();
-            if (health != null)
-            {
-                health.TakeDamage(damage);
-            }
-        }
-
-        RpcDrawLaser(firePoint.position, end);
-    }
-
     /// <summary>
     /// Client RPC call exluding the owner.
     /// Starts a coroutine to render the laser shot
     /// </summary>
     /// <param name="start">Start point of the laser shot (which will be the fire point of the gun)</param>
     /// <param name="end">End point of the laser gun (either what we hit or the range of the gun)</param>
-    [ClientRpc(includeOwner = false)]
-    void RpcDrawLaser(Vector2 start, Vector2 end)
+    public void ShootFX()
     {
-        Debug.Log("RPC: Shoot");
+        // This should not be played from the Audiomanager but the lasergun to give 3D sound
         AudioManager.instance.Play("Laser");
-        StartCoroutine(LaserFlash(start, end));
+        /*Debug.Log("ShootFX");
+        Vector2 start = firePoint.position;
+        Vector2 end = firePoint.position + firePoint.up * range;
+
+        //do a raycast to see where we hit        
+        RaycastHit2D hit = Physics2D.Raycast(start, firePoint.up, range, hitLayers);
+        if (hit.collider != null)
+            end = hit.point;
+
+
+        StartCoroutine(LaserFlash(start, end));*/
     }
 
     /// <summary>
@@ -144,6 +80,7 @@ public class LaserGun : NetworkBehaviour
     /// <returns></returns>
     IEnumerator LaserFlash(Vector2 start, Vector2 end)
     {
+        AudioManager.instance.Play("Laser");
         //TODO: Use object pooling
         //muzzleFlashParticleSystem.Play();
         Vector3 start3 = new Vector3(start.x, start.y, 0f);

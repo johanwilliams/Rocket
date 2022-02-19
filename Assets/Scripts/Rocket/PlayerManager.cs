@@ -12,7 +12,8 @@ using UnityEngine.InputSystem;
 public class PlayerManager : NetworkBehaviour
 {        
 
-    [SerializeField] private string remoteLayerName = "PlayerRemote";
+    [SerializeField] private string layerPlayerLocal = "PlayerLocal";
+    [SerializeField] private string layerPlayerRemote = "PlayerRemote";
 
     [Header("Ground collision")]
     [SerializeField] private bool groundCollisionEnabled = true;
@@ -69,12 +70,10 @@ public class PlayerManager : NetworkBehaviour
 
             energybar = GameObject.FindObjectOfType<Energybar>();
             energybar.SetMaxEnergy(energy.maxEnergy);
-        }
-        else
-        {
+
             // Set the remote layer on all non local players
-            SetRemotePlayerLayer();
-        }
+            SetPlayerLayer(true);
+        }        
     }
 
     /// <summary>
@@ -90,12 +89,22 @@ public class PlayerManager : NetworkBehaviour
     /// <summary>
     /// Set the remote layer on non local players. This is used in raycasting to avoid hitting the local player
     /// </summary>
-    private void SetRemotePlayerLayer()
-    {
-        gameObject.layer = LayerMask.NameToLayer(remoteLayerName);
-    }    
+    public void SetPlayerLayer(bool isLocal)
+    {        
+        if (isLocal)
+        {
+            Debug.Log("Setting player layer: LOCAL");
+            gameObject.layer = LayerMask.NameToLayer(layerPlayerLocal);
+        }            
+        else
+        {
+            Debug.Log("Setting player layer: REMOTE");
+            gameObject.layer = LayerMask.NameToLayer(layerPlayerRemote);
+        }
+            
+    }
 
-    #endregion    
+    #endregion
 
     /// <summary>
     /// Triggers on collision and checks if collided with the ground layer.
@@ -105,13 +114,17 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     /// <param name="collision">Collision details</param>    
     ///     
+    [ServerCallback]
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (isLocalPlayer && groundCollisionEnabled && collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (!isServer)
+            return;
+
+        if (groundCollisionEnabled && collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             float magnitude = collision.relativeVelocity.magnitude;
             if (magnitude > magnitudeThreshold)
-                CmdTakeDamage(magnitude * damageModifier);
+                health.TakeDamage(magnitude * damageModifier);
         }
     }
 
@@ -172,7 +185,7 @@ public class PlayerManager : NetworkBehaviour
         // Play death effect
         deathEffect.Play();
         damageEffect.Stop();
-        AudioManager.instance.Play("Explosion");
+        AudioManager.instance.Play("Explosion");    //TODO: This should not be played on the AudioManager but from the Rocket itself to enable 3D sound
 
         // Disable all movement and weapon input. No moving or shooting if you are dead!
         engine.Disable();
@@ -304,31 +317,7 @@ public class PlayerManager : NetworkBehaviour
             Debug.Log($"Take {health.maxHealth / 10f} damage");
             CmdTakeDamage(health.maxHealth / 10f);
         }
-    }
-
-    public void OnDebug3Changed(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            Debug.Log("Debug action 3");
-        }
-    }
-
-    public void OnDebug4Changed(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            Debug.Log("Debug action 4");
-        }
-    }
-
-    public void OnDebug5Changed(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            Debug.Log("Debug action 5");
-        }
-    }
+    }    
 
     #endregion
 

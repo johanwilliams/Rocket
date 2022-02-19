@@ -54,7 +54,7 @@ public class RocketMovement : NetworkBehaviour
             else
                 UpdateThruster(thrusterValue, false);
         }        
-    }
+    }    
     
 
     /// <summary>

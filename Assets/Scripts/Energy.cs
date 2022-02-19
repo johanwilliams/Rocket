@@ -61,7 +61,7 @@ public class Energy : NetworkBehaviour
         return energy >= energyCost;
     }
 
-    [Command]
+    [Server]
     /// <summary>
     /// Executed on the server when we want to consume energy
     /// </summary>
