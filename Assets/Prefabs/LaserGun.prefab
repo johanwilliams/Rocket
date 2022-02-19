@@ -218,8 +218,8 @@ MonoBehaviour:
   damage: 10
   recoil: 5
   energyCost: 5
-  speed: 8000
-  timeToLive: 2
+  speed: 10
+  timeToLive: 5
   shotPrefab: {fileID: 6186455950725803822, guid: 61e249fcfb221e7468120bc24fa89668,
     type: 3}
   weaponSound: {fileID: 0}
