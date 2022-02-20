@@ -9,7 +9,7 @@ public class LaserShot : NetworkBehaviour
     private Rigidbody2D rigidBody;    
     private uint shooter;
     private float destroyAfter = 2f;
-    public float speed = 0.3f;
+    public float speed = 200f;
 
 
     private void Start()
@@ -25,7 +25,7 @@ public class LaserShot : NetworkBehaviour
 
     private void Update()
     {        
-        transform.position = transform.position + rigidBody.transform.up * speed;
+        transform.position = transform.position + rigidBody.transform.up * speed * Time.deltaTime;
     }
 
     public void Init(uint shooterNetId)

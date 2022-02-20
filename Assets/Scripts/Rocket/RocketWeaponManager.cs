@@ -24,6 +24,7 @@ public class RocketWeaponManager : NetworkBehaviour
 
     [Header("Weapon prefabs")]
     public GameObject lasergunPrefab;
+    public GameObject homingMissilePrefab;
 
     [SyncVar(hook = nameof(OnChangeWeapon))]
     public EquippedWeapon equippedWeapon;
@@ -97,6 +98,15 @@ public class RocketWeaponManager : NetworkBehaviour
         primaryWeapon.ShootFX();
     }
 
+    [Command]
+    private void CmdSpawnHomingMissile()
+    {
+        Debug.Log("Spawning homing missile");
+        Vector2 spawnPosition = weaponMountPoint.transform.position + -primaryWeapon.firePoint.up * 50f;
+        GameObject projectile = Instantiate(homingMissilePrefab, spawnPosition, weaponMountPoint.transform.rotation);
+        NetworkServer.Spawn(projectile);
+    }
+
     void OnChangeWeapon(EquippedWeapon oldEquippedWeapon, EquippedWeapon newEquippedWeapon)
     {
         StartCoroutine(ChangeWeapon(newEquippedWeapon));
@@ -167,9 +177,9 @@ public class RocketWeaponManager : NetworkBehaviour
 
     public void OnDebug5Changed(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.started)
         {
-
+            CmdSpawnHomingMissile();
         }
     }
 

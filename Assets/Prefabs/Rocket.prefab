@@ -5249,6 +5249,8 @@ MonoBehaviour:
   syncInterval: 0.1
   lasergunPrefab: {fileID: 3227106064140533508, guid: 42d5300e459017747b29844644dd8e6c,
     type: 3}
+  homingMissilePrefab: {fileID: 6352303227272613785, guid: 6d91cfe43629cf8419101ea05075e7a6,
+    type: 3}
   equippedWeapon: 0
   weaponMountPoint: {fileID: 5012786997660822149}
 --- !u!114 &3766997271460112262
