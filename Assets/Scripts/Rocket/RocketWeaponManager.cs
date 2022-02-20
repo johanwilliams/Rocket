@@ -33,12 +33,16 @@ public class RocketWeaponManager : NetworkBehaviour
 
     public GameObject weaponMountPoint;
 
+    private PrefabPoolManager prefabPoolManager;
+
     private void Start()
     {
         health = GetComponent<Health>();
         energy = GetComponent<Energy>();
         rocket = GetComponent<RocketMovement>();
         playerManager = GetComponent<PlayerManager>();
+
+        prefabPoolManager = FindObjectOfType<PrefabPoolManager>();
 
         if (isLocalPlayer)
             CmdChangeEquippedWeapon(EquippedWeapon.lasergun);
@@ -52,27 +56,20 @@ public class RocketWeaponManager : NetworkBehaviour
 
     private void Update()
     {
-        if (isLocalPlayer && primaryActive && primaryWeapon != null)
-        {
-            ShootPrimary();
-            if (primaryWeapon.fireRate == 0)
-                primaryActive = false;
-        }
-    }
-
-    private void ShootPrimary()
-    {
-        if (primaryWeapon.CanShoot() && energy.CanConsume(primaryWeapon.energyCost))
+        if (isLocalPlayer && primaryActive && primaryWeapon != null && primaryWeapon.CanShoot() && energy.CanConsume(primaryWeapon.energyCost))
         {
             Debug.Log($"Client {netId} shooting with {primaryWeapon.displayName}!");
             primaryWeapon.Shoot();
+            
+            CmdShoot(netId, primaryWeapon.firePoint.transform.position, weaponMountPoint.transform.rotation);
 
-            CmdShoot(netId);
+            if (primaryWeapon.fireRate == 0)
+                primaryActive = false;
         }
-    }
+    }    
 
     [Command]
-    private void CmdShoot(uint shooterNetId)
+    private void CmdShoot(uint shooterNetId, Vector2 _position, Quaternion _rotation)
     {
         Debug.Log($"Server: Client {shooterNetId} is shooting");
 
@@ -81,8 +78,11 @@ public class RocketWeaponManager : NetworkBehaviour
             energy.Consume(primaryWeapon.energyCost);
             primaryWeapon.Shoot();
 
-            GameObject projectile = Instantiate(primaryWeapon.shotPrefab, primaryWeapon.firePoint.transform.position, weaponMountPoint.transform.rotation);
-            projectile.GetComponent<LaserShot>().Init(shooterNetId, primaryWeapon.timeToLive, primaryWeapon.speed);
+            //GameObject projectile = Instantiate(primaryWeapon.shotPrefab, primaryWeapon.firePoint.transform.position, weaponMountPoint.transform.rotation);
+            GameObject projectile = Instantiate(primaryWeapon.shotPrefab, _position, _rotation);
+            //Object pooling
+            //GameObject projectile = Instantiate(primaryWeapon.shotPrefab, primaryWeapon.firePoint.transform.position, weaponMountPoint.transform.rotation);
+            projectile.GetComponent<LaserShot>().Init(shooterNetId);
             NetworkServer.Spawn(projectile);
 
             RpcShoot();            

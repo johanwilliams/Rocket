@@ -8,13 +8,13 @@ public class LaserShot : NetworkBehaviour
 {    
     private Rigidbody2D rigidBody;    
     private uint shooter;
-    private float destroyAfter;
-    private float force;
+    private float destroyAfter = 2f;
+    public float speed = 0.3f;
+
 
     private void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
-        rigidBody.AddForce(transform.up * force);
     }
 
     public override void OnStartServer()
@@ -23,11 +23,14 @@ public class LaserShot : NetworkBehaviour
             Invoke(nameof(DestroySelf), destroyAfter);
     }
 
-    public void Init(uint shooterNetId, float _destroyAfter, float _force)
+    private void Update()
+    {        
+        transform.position = transform.position + rigidBody.transform.up * speed;
+    }
+
+    public void Init(uint shooterNetId)
     {
-        destroyAfter = _destroyAfter;
         shooter = shooterNetId;
-        force = _force;
     }    
 
     // destroy for everyone on the server
