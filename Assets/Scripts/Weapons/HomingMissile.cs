@@ -91,7 +91,10 @@ public class HomingMissile : NetworkBehaviour
 
     private void Update()
     {
-        //Rotate
+        // Thrust
+        transform.position = transform.position + rigidBody.transform.up * speed * Time.deltaTime;
+
+        // Turn
         if (target != null)
         {
             Vector2 dirToTarget = (Vector2)target.position - rigidBody.position;
@@ -99,9 +102,7 @@ public class HomingMissile : NetworkBehaviour
             float rotateAmount = Vector3.Cross(dirToTarget, transform.up).z;
             rigidBody.angularVelocity = -rotateAmount * rotateSpeed;
             Debug.DrawLine(transform.position, target.transform.position);
-        }
-
-        transform.position = transform.position + rigidBody.transform.up * speed * Time.deltaTime;
+        }        
     }
 
 

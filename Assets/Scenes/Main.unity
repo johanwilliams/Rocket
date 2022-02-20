@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.109321594, g: 0.11210364, b: 0.14887576, a: 1}
+  m_IndirectSpecularColor: {r: 0.08250849, g: 0.08719081, b: 0.115872845, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2017,6 +2017,7 @@ MonoBehaviour:
   playerSpawnMethod: 1
   spawnPrefabs:
   - {fileID: 6186455950725803822, guid: 61e249fcfb221e7468120bc24fa89668, type: 3}
+  - {fileID: 6352303227272613785, guid: 6d91cfe43629cf8419101ea05075e7a6, type: 3}
 --- !u!4 &617837757
 Transform:
   m_ObjectHideFlags: 0
@@ -2113,7 +2114,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.5239651, y: 1}
+    m_SensorSize: {x: 1.5113759, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
