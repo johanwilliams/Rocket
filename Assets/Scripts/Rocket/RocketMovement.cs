@@ -62,9 +62,8 @@ public class RocketMovement : NetworkBehaviour
     /// </summary>
     public void Disable()
     {
-        thrusterValue = 0f;
         rotationValue = 0f;
-        thrusterBoost = false;
+        UpdateThruster(0f, false);        
     }
 
     #region Rocket rigid body updates

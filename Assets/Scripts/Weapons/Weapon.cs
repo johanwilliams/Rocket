@@ -10,8 +10,6 @@ public abstract class Weapon : MonoBehaviour
     public float damage = 10f;
     public float recoil = 5f;
     public float energyCost = 5.0f;
-    public float speed = 8000.0f;
-    public float timeToLive = 2.0f;
 
     public GameObject shotPrefab;
 
