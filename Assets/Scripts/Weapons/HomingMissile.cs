@@ -5,25 +5,37 @@ using Mirror;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class HomingMissile : NetworkBehaviour
-{
-    private enum State { Launched, Searching, Locked };
+{    
+    [SerializeField] private float destroyAfter = 10f;    
 
-    private Rigidbody2D rigidBody;
-    private uint shooter;
-    [SerializeField] private float destroyAfter = 10f;
-    [SerializeField] private float speed = 110;
-    [SerializeField] private float rotateSpeed = 200f;
-
-
-    [Header("Search properties")]
+    [Header("Missile lock on")]
     [SerializeField] [Range(0f, 5f)] private float searchStartTime = 1f;
     [SerializeField] [Range(1f, 5f)] private float searchesPerSecond = 2f;    
     [SerializeField] [Range(1f, 100f)] private float searchRadius = 20f;
     [SerializeField] [Range(1f, 360f)] private float searchAngle = 180f;
 
+    [Header("Movement")]
+    [SerializeField] private float speed = 110;
+    [SerializeField] private float rotateSpeed = 200f;
 
+    [Header("Prediction")]
+    [SerializeField] private float maxDistancePredict = 100;
+    [SerializeField] private float minDistancePredict = 5;
+    [SerializeField] private float maxTimePrediction = 5;
+    private Vector3 standardPrediction;
+
+    [Header("Death")]
+    [SerializeField] private ParticleSystem deathEffect;
+    [SerializeField] private GameObject[] disableGameObjectsOnDeath;
+    [SerializeField] private float deathTime = 2f;
+
+    private enum State { Launched, Searching, Locked };
+    private Rigidbody2D rigidBody;
+    private uint shooter;
     private State state;        // State of the missile
-    private Transform target;   // The target to lock on to
+    private Rigidbody2D target;   // The target to lock on to
+
+    private bool dead = false;
 
     private void Start()
     {
@@ -70,7 +82,7 @@ public class HomingMissile : NetworkBehaviour
                 {
                     // Lock onto the new target
                     state = State.Locked;
-                    target = hitCollider.transform;
+                    target = hitCollider.gameObject.GetComponent<Rigidbody2D>();
                 }
             }
         }
@@ -91,24 +103,75 @@ public class HomingMissile : NetworkBehaviour
 
     private void Update()
     {
+
+        if (dead)
+            return;
+
         // Thrust
-        transform.position = transform.position + rigidBody.transform.up * speed * Time.deltaTime;
+        ThrustRocket();        
 
         // Turn
         if (target != null)
         {
-            Vector2 dirToTarget = (Vector2)target.position - rigidBody.position;
-            dirToTarget.Normalize();
-            float rotateAmount = Vector3.Cross(dirToTarget, transform.up).z;
-            rigidBody.angularVelocity = -rotateAmount * rotateSpeed;
-            Debug.DrawLine(transform.position, target.transform.position);
+            var leadTimePercentage = Mathf.InverseLerp(minDistancePredict, maxDistancePredict, Vector3.Distance(transform.position, target.position));
+
+            PredictMovement(leadTimePercentage);
+            RotateRocket();            
         }        
     }
 
+    private void ThrustRocket()
+    {        
+        transform.position = transform.position + rigidBody.transform.up * speed * Time.deltaTime;
+    }
+
+    private void PredictMovement(float leadTimePercentage)
+    {
+        var predictionTime = Mathf.Lerp(0, maxTimePrediction, leadTimePercentage);
+
+        standardPrediction = target.position + target.velocity * predictionTime;
+    }    
+
+    private void RotateRocket()
+    {
+        Vector2 dirToTarget = (Vector2)standardPrediction - rigidBody.position;
+        float angle = Mathf.Atan2(dirToTarget.y, dirToTarget.x) * Mathf.Rad2Deg - 90;
+        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * rotateSpeed);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        dead = true;
+        
+
+        // Disable game objects
+        foreach (GameObject gameObject in disableGameObjectsOnDeath)        
+            gameObject.SetActive(false);
+
+
+        // Disable collider
+        Collider2D _col = GetComponent<Collider2D>();
+        if (_col != null)
+            _col.enabled = false;
+
+        // Play deatch effect
+        deathEffect.Play();
+
+        StartCoroutine(WaitBeforeDying());
+
+    }
+
+    IEnumerator WaitBeforeDying()
+    {
+        yield return new WaitForSeconds(deathTime);
+        if (isServer)
+            DestroySelf();
+    }
 
     void OnDrawGizmos()
     {
-        if (state == State.Searching)
+        if (target == null)
         {
             Color c = Color.yellow;
             c.a = 0.5f;
@@ -118,7 +181,10 @@ public class HomingMissile : NetworkBehaviour
         }
         else if (state == State.Locked)
         {
-            Debug.DrawLine(transform.position, target.transform.position, Color.red);
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, target.position);
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, standardPrediction);            
         }
     }
 
