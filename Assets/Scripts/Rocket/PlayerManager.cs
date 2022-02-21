@@ -235,8 +235,7 @@ public class PlayerManager : NetworkBehaviour
 
         gameObject.transform.position = position;
         gameObject.transform.rotation = rotation;
-        ToggleCollider(true);
-        respawnEffect.Play();
+        ToggleCollider(true);        
     }
 
     /// <summary>
@@ -250,7 +249,8 @@ public class PlayerManager : NetworkBehaviour
         Debug.Log($"Client: {transform.name} enabling components and spawn effect");
         // Unhide the rocket and turn on the collider        
         ToggleVisibility(true);
-        ToggleCollider(true);        
+        ToggleCollider(true);
+        respawnEffect.Play();
     }
 
     /// <summary>

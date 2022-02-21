@@ -157,6 +157,8 @@ public class HomingMissile : NetworkBehaviour
 
         // Play deatch effect
         deathEffect.Play();
+        //AudioManager.instance.PlayClipAtPoint("Explosion", transform.position);
+        AudioManager.instance.Play("Explosion");
 
         StartCoroutine(WaitBeforeDying());
 
