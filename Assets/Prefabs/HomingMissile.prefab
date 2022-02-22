@@ -5042,21 +5042,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  destroyAfter: 30
+  destroyAfter: 20000
   searchStartTime: 0.3
   searchesPerSecond: 2
   searchRadius: 50
   searchAngle: 180
   speed: 120
   rotateSpeed: 5
-  maxDistancePredict: 2
-  minDistancePredict: 1
-  maxTimePrediction: 1
+  maxDistancePredict: 4
+  minDistancePredict: 3
+  maxTimePrediction: 0.2
   deathEffect: {fileID: 5949010035817965502}
   disableGameObjectsOnDeath:
   - {fileID: 1525450104562313565}
   - {fileID: 5071843475062329094}
-  disableComponentsOnDeath: []
+  deathTime: 2
 --- !u!70 &6354649011331396420
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
