@@ -10,6 +10,7 @@ public class LaserShot : NetworkBehaviour
     private uint shooter;
     private float destroyAfter = 2f;
     public float speed = 200f;
+    public float damage = 40;
 
 
     private void Start()
@@ -65,7 +66,7 @@ public class LaserShot : NetworkBehaviour
                 Debug.Log($"Colliding with own gameObject - Ignoring...");
                 return;
             }
-            health.TakeDamage(40f);
+            health.TakeDamage(damage);
         }
 
         //Instantiate impact particle system through RPC call

@@ -25,6 +25,7 @@ public class HomingMissile : NetworkBehaviour
     private Vector3 standardPrediction;
 
     [Header("Death")]
+    [SerializeField] private float damage = 80;
     [SerializeField] private ParticleSystem deathEffect;
     [SerializeField] private GameObject[] disableGameObjectsOnDeath;
     [SerializeField] private float deathTime = 2f;
@@ -32,14 +33,18 @@ public class HomingMissile : NetworkBehaviour
     private enum State { Launched, Searching, Locked };
     private Rigidbody2D rigidBody;
     private uint shooter;
-    private State state;        // State of the missile
-    private Rigidbody2D target;   // The target to lock on to
+    private State state;                    // State of the missile (searching, locked on)
+    private Rigidbody2D targetRb;           // Target rigid body (to predict its movement etc)
+    private Health targetHealth;            // Used to damage the target if we hit
 
     private bool dead = false;
 
     private void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
+
+        if (!isServer)
+            rigidBody.isKinematic = true;
     }
 
     private void OnEnable()
@@ -73,7 +78,8 @@ public class HomingMissile : NetworkBehaviour
         foreach (Collider2D hitCollider in hitColliders)
         {
             // Is the collider a Player we can lock onto?
-            if (hitCollider.gameObject.GetComponent<RocketMovement>() != null)
+            PlayerManager p = hitCollider.gameObject.GetComponent<PlayerManager>();
+            if (p != null)
             {
                 float distanceToTarget = Vector3.Distance(transform.position, hitCollider.transform.position);
                 float angleToTarget = AngleToTarget(hitCollider.transform) * 2f;
@@ -82,7 +88,8 @@ public class HomingMissile : NetworkBehaviour
                 {
                     // Lock onto the new target
                     state = State.Locked;
-                    target = hitCollider.gameObject.GetComponent<Rigidbody2D>();
+                    targetHealth = hitCollider.gameObject.GetComponent<Health>();
+                    targetRb = hitCollider.gameObject.GetComponent<Rigidbody2D>();
                 }
             }
         }
@@ -107,29 +114,54 @@ public class HomingMissile : NetworkBehaviour
         if (dead)
             return;
 
+        // If target is dead go back to searching
+        if (state == State.Locked && targetHealth != null && targetHealth.IsDead())
+        {
+            targetRb = null;
+            targetHealth = null;
+            state = State.Searching;
+
+        }
+
         // Thrust
-        ThrustRocket();        
+        //ThrustRocket();        
 
         // Turn
-        if (target != null)
+        if (state == State.Locked)
         {
-            var leadTimePercentage = Mathf.InverseLerp(minDistancePredict, maxDistancePredict, Vector3.Distance(transform.position, target.position));
+            var leadTimePercentage = Mathf.InverseLerp(minDistancePredict, maxDistancePredict, Vector3.Distance(transform.position, targetRb.position));
 
             PredictMovement(leadTimePercentage);
-            RotateRocket();            
+            //RotateRocket();            
         }        
     }
 
+    private void FixedUpdate()
+    {
+        if (!isServer)
+            return;
+
+        // Thrust
+        ThrustRocket();
+
+        // Turn
+        if (state == State.Locked)
+        {            
+            RotateRocket();
+        }
+    }
+
     private void ThrustRocket()
-    {        
-        transform.position = transform.position + rigidBody.transform.up * speed * Time.deltaTime;
+    {
+        //transform.position = transform.position + rigidBody.transform.up * speed * Time.deltaTime;
+        transform.position = transform.position + rigidBody.transform.up * speed;
     }
 
     private void PredictMovement(float leadTimePercentage)
     {
         var predictionTime = Mathf.Lerp(0, maxTimePrediction, leadTimePercentage);
 
-        standardPrediction = target.position + target.velocity * predictionTime;
+        standardPrediction = targetRb.position + targetRb.velocity * predictionTime;
     }    
 
     private void RotateRocket()
@@ -137,18 +169,34 @@ public class HomingMissile : NetworkBehaviour
         Vector2 dirToTarget = (Vector2)standardPrediction - rigidBody.position;
         float angle = Mathf.Atan2(dirToTarget.y, dirToTarget.x) * Mathf.Rad2Deg - 90;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * rotateSpeed);
+        //transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * rotateSpeed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, q, rotateSpeed);
     }
 
+    [ServerCallback]
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // Only check for a hit and deal damage on the server
+        if (!isServer)
+            return;
+
         dead = true;
-        
 
+        // Deal damage
+        targetHealth.TakeDamage(damage);        
+
+        RpcDie();
+
+        StartCoroutine(WaitBeforeDying());
+
+    }
+
+    [ClientRpc]
+    private void RpcDie()
+    {
         // Disable game objects
-        foreach (GameObject gameObject in disableGameObjectsOnDeath)        
+        foreach (GameObject gameObject in disableGameObjectsOnDeath)
             gameObject.SetActive(false);
-
 
         // Disable collider
         Collider2D _col = GetComponent<Collider2D>();
@@ -159,9 +207,6 @@ public class HomingMissile : NetworkBehaviour
         deathEffect.Play();
         //AudioManager.instance.PlayClipAtPoint("Explosion", transform.position);
         AudioManager.instance.Play("Explosion");
-
-        StartCoroutine(WaitBeforeDying());
-
     }
 
     IEnumerator WaitBeforeDying()
@@ -173,7 +218,7 @@ public class HomingMissile : NetworkBehaviour
 
     void OnDrawGizmos()
     {
-        if (target == null)
+        if (targetRb == null)
         {
             Color c = Color.yellow;
             c.a = 0.5f;
@@ -184,7 +229,7 @@ public class HomingMissile : NetworkBehaviour
         else if (state == State.Locked)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, target.position);
+            Gizmos.DrawLine(transform.position, targetRb.position);
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, standardPrediction);            
         }

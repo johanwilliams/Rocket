@@ -166,7 +166,7 @@ public class PlayerManager : NetworkBehaviour
     private void Die()
     {
         RpcDieAndDisable();
-        StartCoroutine(Respawn());
+        StartCoroutine(Respawn());        
     }
 
     /// <summary>
