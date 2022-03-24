@@ -9,21 +9,21 @@ using Mirror;
 public class RocketMovement : NetworkBehaviour
 {
     [Header("Rocket movement")]
-    [SerializeField] private float rotationForce = 150f;
-    [SerializeField] public float thrustForce = 200.0f;
+    [SerializeField] private float rotationForceMultiplayer = 150f;
+    [SerializeField] public float thrusterForceMultiplier = 200.0f;
     
 
     [Header("Rocket boost")]
-    [SerializeField] [Range(0f, 3f)] private float boostModifier = 1.5f;
+    [SerializeField] [Range(0f, 3f)] private float boostMultiplier = 1.5f;
     [SerializeField] [Range(0f, 50f)] private float boostEnergyCost = 30f;
     [SerializeField] private ParticleSystem thrusterFlame;
     [SerializeField] private ParticleSystem thrusterBoostFlame;
 
     private Rigidbody2D rb;
-    public float rotationValue;
-
-    private float thrusterValue;  
-    private bool thrusterBoost;
+    
+    private float rotationValue;
+    [SyncVar(hook = nameof(OnThrusterChanged))] private float thrusterValue;
+    [SyncVar(hook = nameof(OnThrusterBoostChanged))] private bool thrusterBoost;
     
     private Health health;
     private Energy energy;
@@ -42,8 +42,8 @@ public class RocketMovement : NetworkBehaviour
         if (!isServer)
             return;
 
-        ThrustForward(thrusterValue * thrustForce);
-        Rotate(rotationValue * -rotationForce);
+        ThrustForward(thrusterValue * thrusterForceMultiplier);
+        Rotate(rotationValue * -rotationForceMultiplayer);
     }
 
     private void Update()
@@ -64,7 +64,7 @@ public class RocketMovement : NetworkBehaviour
     public void Disable()
     {
         rotationValue = 0f;
-        UpdateThruster(0f, false);        
+        //UpdateThruster(0f, false);        
     }
 
     #region Rocket rigid body updates
@@ -77,7 +77,7 @@ public class RocketMovement : NetworkBehaviour
     /// <param name="amount">Amount of forward force to apply</param>
     private void ThrustForward(float amount)
     {
-        AddForce(rb.transform.up, amount * (thrusterBoost ? boostModifier : 1f));
+        AddForce(rb.transform.up, amount * (thrusterBoost ? boostMultiplier : 1f));
     }
 
     public void AddForce(Vector2 direction, float amount)
@@ -96,95 +96,73 @@ public class RocketMovement : NetworkBehaviour
 
     #endregion
 
-    #region Thruster updates
+    #region Thruster updates    
 
-    /// <summary>
-    /// Updates the thruster of the rocket from new user input
-    /// Will make sure correct thruster effects and sounds are played.
-    /// </summary>
-    /// <param name="newThrusterValue">Thruster value</param>
-    /// <param name="newThrusterBoost">Thruster boost</param>
-    private void UpdateThruster(float newThrusterValue, bool newThrusterBoost)
+    [Command]
+    private void CmdUpdateThruster(float newThrusterValue)
     {
-        // No need to update
-        if (newThrusterValue == thrusterValue && newThrusterBoost == thrusterBoost)
+        // Make sure client is not sending an invalid value
+        newThrusterValue = Mathf.Clamp(newThrusterValue, 0f, 1f);
+
+        // If thrusters stop the boost also needs to be stopped
+        if (newThrusterValue == 0 && thrusterBoost)
+            thrusterBoost = false;
+
+        thrusterValue = newThrusterValue;
+
+    }
+
+    void OnThrusterChanged(float oldThrusterValue, float newThrusterValue)
+    {
+        // Thrust increased from 0
+        if (newThrusterValue > 0 && oldThrusterValue == 0)
+        {
+            thrusterSound.Play();
+            thrusterFlame.Play();
+
+            // Are we also boosting?
+            if (thrusterBoost && !thrusterBoostFlame.isPlaying)
+                thrusterBoostFlame.Play();
+        }
+        // Thrust decreased to 0
+        else if (newThrusterValue == 0 && oldThrusterValue > 0)
+        {
+            thrusterSound.Stop();
+            thrusterFlame.Stop();
+        }
+
+        UpdateThrusterPitchSound();
+    }
+
+    [Command]
+    private void CmdUpdateThrusterBoost(bool newThrusterBoost)
+    {
+        // Don't enable the boost if there is no throttle
+        // TODO: Also check we have enough energy to boost
+        if (newThrusterBoost && thrusterValue == 0)
             return;
 
-        // Has the boost updated
-        if (newThrusterBoost != thrusterBoost)
-        {            
-            // Starting to boost (and we have throttle)
-            if (newThrusterBoost && newThrusterValue > 0)
-                thrusterBoostFlame.Play();
-
-            // Stopping boost
-            if (!newThrusterBoost)
-                thrusterBoostFlame.Stop();
-
-            // Update the thruster boost
-            thrusterBoost = newThrusterBoost;
-        }
-
-        // Thruster updated
-        if (newThrusterValue != thrusterValue)
-        {
-            // Thrust increased from 0
-            if (newThrusterValue > 0 && thrusterValue == 0)
-            {
-                thrusterSound.Play();
-                thrusterFlame.Play();
-
-                // Are we also boosting?
-                if (thrusterBoost)
-                    thrusterBoostFlame.Play();
-            }
-            // Thrust decreased to 0
-            else if (newThrusterValue == 0 && thrusterValue > 0)
-            {
-                thrusterSound.Stop();
-                thrusterFlame.Stop();
-
-                // If thrusters stop the boost also needs to be stopped
-                if (thrusterBoost) { 
-                    thrusterBoost = false;
-                    thrusterBoostFlame.Stop();
-                }
-            }
-
-            // Update the thruster
-            thrusterValue = newThrusterValue;            
-        }
-
-        // Something has changed (either thruster or boost) so we need to update the pitch of the thruster sound
-        thrusterSound.pitch = thrusterValue * (thrusterBoost ? boostModifier : 1f);
-
-        // Tell the server to update all other clients
-        if (isLocalPlayer)
-            CmdUpdateThruster(thrusterValue, thrusterBoost);                
+        thrusterBoost = newThrusterBoost;
     }
 
-    /// <summary>
-    /// Server command to pass on the updated thruster values to all other clients
-    /// </summary>
-    /// <param name="thrusterValue">Thruster value</param>
-    /// <param name="thrusterBoost">Boost</param>
-    [Command]
-    private void CmdUpdateThruster(float thrusterValue, bool thrusterBoost)
+    void OnThrusterBoostChanged(bool oldThrusterBoost, bool newThrusterBoost)
     {
-        RpcUpdateThruster(thrusterValue, thrusterBoost);
+        // Starting to boost
+        if (newThrusterBoost)
+            thrusterBoostFlame.Play();
+
+        // Stopping boost
+        if (!newThrusterBoost)
+            thrusterBoostFlame.Stop();
+
+        UpdateThrusterPitchSound();
     }
 
-    /// <summary>
-    /// Client RPC to update all clients on the updated thruster values.
-    /// Excludes the owner (localplayer) though as this is already updated for the local player
-    /// </summary>
-    /// <param name="thrusterValue">Thruster value</param>
-    /// <param name="thrusterBoost">Boost</param>
-    [ClientRpc(includeOwner = false)]
-    private void RpcUpdateThruster(float thrusterValue, bool thrusterBoost)
+    void UpdateThrusterPitchSound()
     {
-        UpdateThruster(thrusterValue, thrusterBoost);
+        thrusterSound.pitch = thrusterValue * (thrusterBoost ? boostMultiplier : 1f);
     }
+
 
     private void UpdateRotation(float newRotationValue)
     {
@@ -217,22 +195,29 @@ public class RocketMovement : NetworkBehaviour
 
     public void OnThrusterInputChanged(InputAction.CallbackContext context)
     {
-        if (!health.IsDead())
-        {
-            UpdateThruster(context.ReadValue<float>(), thrusterBoost);
-        }            
+        // Don't allow movement input while we are dead
+        if (health.IsDead())
+            return;
+        
+        //UpdateThruster(context.ReadValue<float>(), thrusterBoost);
+        CmdUpdateThruster(context.ReadValue<float>());
+                    
     }
 
     public void OnBoostInputChanged(InputAction.CallbackContext context)
     {
+        // Don't allow movement input while we are dead
+        if (health.IsDead())
+            return;
+
         bool newThrusterBoost = thrusterBoost;
-        if (context.performed && !health.IsDead())
+        if (context.performed)
             newThrusterBoost = true;
 
-        if (context.canceled && !health.IsDead())
+        if (context.canceled)
             newThrusterBoost = false;
 
-        UpdateThruster(thrusterValue, newThrusterBoost);
+        CmdUpdateThrusterBoost(newThrusterBoost);
 
     }
 

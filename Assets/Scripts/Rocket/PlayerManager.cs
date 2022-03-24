@@ -151,6 +151,7 @@ public class PlayerManager : NetworkBehaviour
 
     void OnEnergyChanged(float oldEnergy, float newEnergy)
     {
+        //TODO: This should probably be moved to some UI class
         if (isLocalPlayer)
         {
             energybar.SetEnergy(newEnergy);
