@@ -183,7 +183,8 @@ public class HomingMissile : NetworkBehaviour
         dead = true;
 
         // Deal damage
-        targetHealth.TakeDamage(damage);        
+        if (state == State.Locked)
+            targetHealth.TakeDamage(damage);        
 
         RpcDie();
 
