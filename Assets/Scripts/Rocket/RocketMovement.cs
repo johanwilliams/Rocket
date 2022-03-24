@@ -20,7 +20,7 @@ public class RocketMovement : NetworkBehaviour
     [SerializeField] private ParticleSystem thrusterBoostFlame;
 
     private Rigidbody2D rb;
-    
+
     private float rotationValue;
     [SyncVar(hook = nameof(OnThrusterChanged))] private float thrusterValue;
     [SyncVar(hook = nameof(OnThrusterBoostChanged))] private bool thrusterBoost;
@@ -39,6 +39,7 @@ public class RocketMovement : NetworkBehaviour
 
     private void FixedUpdate()
     {
+        //TODO: Should we only do this on the server? Or would this act as client side prediction if also done on the clients?
         if (!isServer)
             return;
 
@@ -54,9 +55,10 @@ public class RocketMovement : NetworkBehaviour
             float energyNeeded = Time.deltaTime * boostEnergyCost;
             if (energy.CanConsume(energyNeeded))
                 energy.Consume(energyNeeded);
+            else
+                thrusterBoost = false;  // Stop boosting if we don't have enough energy
         }        
-    }    
-    
+    }        
 
     /// <summary>
     /// Stops all movement
@@ -64,7 +66,8 @@ public class RocketMovement : NetworkBehaviour
     public void Disable()
     {
         rotationValue = 0f;
-        //UpdateThruster(0f, false);        
+        thrusterValue = 0f;
+        thrusterBoost = false;
     }
 
     #region Rocket rigid body updates
@@ -77,12 +80,19 @@ public class RocketMovement : NetworkBehaviour
     /// <param name="amount">Amount of forward force to apply</param>
     private void ThrustForward(float amount)
     {
-        AddForce(rb.transform.up, amount * (thrusterBoost ? boostMultiplier : 1f));
+        if (amount > 0)
+            AddForce(rb.transform.up, amount * (thrusterBoost ? boostMultiplier : 1f));
     }
 
+    /// <summary>
+    /// Applies a force to the rocket
+    /// </summary>
+    /// <param name="direction">Direction in which the force is added</param>
+    /// <param name="amount">Amount of force to apply</param>
     public void AddForce(Vector2 direction, float amount)
     {
-        rb.AddForce(direction * amount);
+        if (amount > 0)
+            rb.AddForce(direction * amount);
     }
 
     /// <summary>
@@ -98,6 +108,11 @@ public class RocketMovement : NetworkBehaviour
 
     #region Thruster updates    
 
+    /// <summary>
+    /// Server command that gets called from the local player when the input thuster value has changed.
+    /// Updates the thruster value which is a syncvar that gets synced to all clients
+    /// </summary>
+    /// <param name="newThrusterValue">New thruster input value</param>
     [Command]
     private void CmdUpdateThruster(float newThrusterValue)
     {
@@ -112,6 +127,12 @@ public class RocketMovement : NetworkBehaviour
 
     }
 
+    /// <summary>
+    /// Thuster sync var hook that gets called whenever the thurster value of a rocket changes.
+    /// Updates the thuster effects (flames etc) and sound
+    /// </summary>
+    /// <param name="oldThrusterValue">Old thruster value</param>
+    /// <param name="newThrusterValue">New thruster value</param>
     void OnThrusterChanged(float oldThrusterValue, float newThrusterValue)
     {
         // Thrust increased from 0
@@ -134,6 +155,11 @@ public class RocketMovement : NetworkBehaviour
         UpdateThrusterPitchSound();
     }
 
+    /// <summary>
+    /// Server command that gets called from the local player when the input thuster boost value has changed.
+    /// Updates the thruster boost value which is a syncvar that gets synced to all clients
+    /// </summary>
+    /// <param name="newThrusterBoost">New thruster boost input value</param>
     [Command]
     private void CmdUpdateThrusterBoost(bool newThrusterBoost)
     {
@@ -145,6 +171,12 @@ public class RocketMovement : NetworkBehaviour
         thrusterBoost = newThrusterBoost;
     }
 
+    /// <summary>
+    /// Thuster boost sync var hook that gets called whenever the thurster boost value of a rocket changes.
+    /// Updates the thuster boost effects (flames etc) and sound
+    /// </summary>
+    /// <param name="oldThrusterBoost">Old thruster boost value</param>
+    /// <param name="newThrusterBoost">New thruster boost value</param>
     void OnThrusterBoostChanged(bool oldThrusterBoost, bool newThrusterBoost)
     {
         // Starting to boost
@@ -158,41 +190,31 @@ public class RocketMovement : NetworkBehaviour
         UpdateThrusterPitchSound();
     }
 
+    /// <summary>
+    /// Updates the pitch of the thuster sound based on the current thuster and boost values
+    /// </summary>
     void UpdateThrusterPitchSound()
     {
         thrusterSound.pitch = thrusterValue * (thrusterBoost ? boostMultiplier : 1f);
-    }
+    }    
 
-
-    private void UpdateRotation(float newRotationValue)
+    /// <summary>
+    /// Server command to update the rotation value of the rocket
+    /// </summary>
+    /// <param name="newRotationValue">New rotation value</param>
+    [Command]
+    private void CmdUpdateRotation(float newRotationValue)
     {
-        // No need to update
-        if (newRotationValue == rotationValue)
-            return;
+        // Make sure client is not sending an invalid value
+        newRotationValue = Mathf.Clamp(newRotationValue, -1f, 1f);
 
         rotationValue = newRotationValue;
-
-        // Tell the server to update all other clients
-        if (isLocalPlayer)
-            CmdUpdateRotation(rotationValue);
-    }
-
-    [Command]
-    private void CmdUpdateRotation(float rotationValue)
-    {
-        RpcUpdateRotation(rotationValue);
-    }
-
-    [ClientRpc(includeOwner = false)]
-    private void RpcUpdateRotation(float rotationValue)
-    {
-        UpdateRotation(rotationValue);
     }
 
     #endregion
 
     #region Input
-
+    
     public void OnThrusterInputChanged(InputAction.CallbackContext context)
     {
         // Don't allow movement input while we are dead
@@ -224,7 +246,7 @@ public class RocketMovement : NetworkBehaviour
     public void OnRotationInputChanged(InputAction.CallbackContext context)
     {
         if (!health.IsDead())
-            UpdateRotation(context.ReadValue<Vector2>().x);            
+            CmdUpdateRotation(context.ReadValue<Vector2>().x);            
     }
 
     #endregion
