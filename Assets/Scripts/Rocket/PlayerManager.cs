@@ -211,9 +211,13 @@ public class PlayerManager : NetworkBehaviour
 
         // Get a new spawn point and send it to the target player
         Debug.Log($"Server: Respawning and moving {transform.name} and resetting health");
-        Transform spawnPosition = NetworkManager.startPositions[Random.Range(0, NetworkManager.startPositions.Count)];        
-        RpcRespawnTarget(spawnPosition.position, spawnPosition.rotation);
-        
+        Transform spawnPosition = NetworkManager.startPositions[Random.Range(0, NetworkManager.startPositions.Count)];
+        //RpcRespawnTarget(spawnPosition.position, spawnPosition.rotation);
+        gameObject.transform.position = spawnPosition.position;
+        gameObject.transform.rotation = spawnPosition.rotation;
+        ToggleCollider(true);
+
+
         // Wait and then play the spawn effect
         yield return new WaitForSeconds(respawnDuration);
         RpcRespawnAll();

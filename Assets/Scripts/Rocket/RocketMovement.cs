@@ -39,20 +39,21 @@ public class RocketMovement : NetworkBehaviour
 
     private void FixedUpdate()
     {
+        if (!isServer)
+            return;
+
         ThrustForward(thrusterValue * thrustForce);
         Rotate(rotationValue * -rotationForce);
     }
 
     private void Update()
     {       
-        // For the local player boosting, check if we afford the energy cost and consume it. If not disable boost.
-        if (isLocalPlayer && thrusterBoost && thrusterValue > 0f)
+        // Check if we afford the energy cost and consume it. If not disable boost.
+        if (isServer && thrusterBoost && thrusterValue > 0f)
         {
             float energyNeeded = Time.deltaTime * boostEnergyCost;
             if (energy.CanConsume(energyNeeded))
                 energy.Consume(energyNeeded);
-            else
-                UpdateThruster(thrusterValue, false);
         }        
     }    
     
@@ -185,6 +186,31 @@ public class RocketMovement : NetworkBehaviour
         UpdateThruster(thrusterValue, thrusterBoost);
     }
 
+    private void UpdateRotation(float newRotationValue)
+    {
+        // No need to update
+        if (newRotationValue == rotationValue)
+            return;
+
+        rotationValue = newRotationValue;
+
+        // Tell the server to update all other clients
+        if (isLocalPlayer)
+            CmdUpdateRotation(rotationValue);
+    }
+
+    [Command]
+    private void CmdUpdateRotation(float rotationValue)
+    {
+        RpcUpdateRotation(rotationValue);
+    }
+
+    [ClientRpc(includeOwner = false)]
+    private void RpcUpdateRotation(float rotationValue)
+    {
+        UpdateRotation(rotationValue);
+    }
+
     #endregion
 
     #region Input
@@ -213,7 +239,7 @@ public class RocketMovement : NetworkBehaviour
     public void OnRotationInputChanged(InputAction.CallbackContext context)
     {
         if (!health.IsDead())
-            rotationValue = context.ReadValue<Vector2>().x;
+            UpdateRotation(context.ReadValue<Vector2>().x);            
     }
 
     #endregion
