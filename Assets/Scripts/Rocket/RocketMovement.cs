@@ -40,8 +40,8 @@ public class RocketMovement : NetworkBehaviour
     private void FixedUpdate()
     {
         //TODO: Should we only do this on the server? Or would this act as client side prediction if also done on the clients?
-        if (!isServer)
-            return;
+        //if (!isServer)
+        //    return;
 
         ThrustForward(thrusterValue * thrusterForceMultiplier);
         Rotate(rotationValue * -rotationForceMultiplayer);
@@ -63,11 +63,15 @@ public class RocketMovement : NetworkBehaviour
     /// <summary>
     /// Stops all movement
     /// </summary>
-    public void Disable()
+    public void Stop()
     {
-        rotationValue = 0f;
+        rotationValue = 0f;       
         thrusterValue = 0f;
+        thrusterSound.Stop();
+        thrusterFlame.Stop();
+
         thrusterBoost = false;
+        thrusterBoostFlame.Stop();
     }
 
     #region Rocket rigid body updates

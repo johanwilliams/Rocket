@@ -189,7 +189,7 @@ public class PlayerManager : NetworkBehaviour
         AudioManager.instance.Play("Explosion");    //TODO: This should not be played on the AudioManager but from the Rocket itself to enable 3D sound
 
         // Disable all movement and weapon input. No moving or shooting if you are dead!
-        engine.Disable();
+        engine.Stop();
         weaponMgmt.Disable();
     }
 

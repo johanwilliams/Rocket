@@ -43,8 +43,8 @@ public class HomingMissile : NetworkBehaviour
     {
         rigidBody = GetComponent<Rigidbody2D>();
 
-        if (!isServer)
-            rigidBody.isKinematic = true;
+        //if (!isServer)
+        //    rigidBody.isKinematic = true;
     }
 
     private void OnEnable()
@@ -123,9 +123,6 @@ public class HomingMissile : NetworkBehaviour
 
         }
 
-        // Thrust
-        //ThrustRocket();        
-
         // Turn
         if (state == State.Locked)
         {
@@ -138,8 +135,8 @@ public class HomingMissile : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        if (!isServer)
-            return;
+        //if (!isServer)
+        //    return;
 
         // Thrust
         ThrustRocket();
@@ -153,8 +150,7 @@ public class HomingMissile : NetworkBehaviour
 
     private void ThrustRocket()
     {
-        //transform.position = transform.position + rigidBody.transform.up * speed * Time.deltaTime;
-        transform.position = transform.position + rigidBody.transform.up * speed;
+        rigidBody.AddForce(rigidBody.transform.up * speed);
     }
 
     private void PredictMovement(float leadTimePercentage)
@@ -182,9 +178,13 @@ public class HomingMissile : NetworkBehaviour
 
         dead = true;
 
+        // See if we hit something with health
+        GameObject go = collision.gameObject;
+        Health health = go.GetComponent<Health>();
+
         // Deal damage
-        if (state == State.Locked)
-            targetHealth.TakeDamage(damage);        
+        if (health != null && state == State.Locked)
+            health.TakeDamage(damage);        
 
         RpcDie();
 
