@@ -45,12 +45,14 @@ public class RocketWeaponManager : NetworkBehaviour
 
         prefabPoolManager = FindObjectOfType<PrefabPoolManager>();
 
+        health.OnDeath += Die;
+
         if (isLocalPlayer)
             CmdChangeEquippedWeapon(EquippedWeapon.lasergun);
     }
     
 
-    public void Disable()
+    public void Die()
     {
         primaryActive = false;
     }
