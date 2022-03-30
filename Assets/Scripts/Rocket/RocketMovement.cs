@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
+using System;
 
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(Rigidbody2D))]
@@ -35,7 +36,9 @@ public class RocketMovement : NetworkBehaviour
         health = GetComponent<Health>();
         energy = GetComponent<Energy>();
         thrusterSound = GetComponent<AudioSource>();
-    }
+        
+        health.OnDeath += Die;
+    }    
 
     private void FixedUpdate()
     {
@@ -66,6 +69,17 @@ public class RocketMovement : NetworkBehaviour
     public void Stop()
     {
         rotationValue = 0f;       
+        thrusterValue = 0f;
+        thrusterSound.Stop();
+        thrusterFlame.Stop();
+
+        thrusterBoost = false;
+        thrusterBoostFlame.Stop();
+    }
+
+    private void Die()
+    {
+        rotationValue = 0f;
         thrusterValue = 0f;
         thrusterSound.Stop();
         thrusterFlame.Stop();

@@ -35,7 +35,6 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] private Energybar energybar;
 
     // Components we need access to
-    private RocketMovement engine;
     private RocketWeaponManager weaponMgmt;
     private Health health;
     private Energy energy;
@@ -48,7 +47,6 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     void Start()
     {        
-        engine = GetComponent<RocketMovement>();
         weaponMgmt = GetComponent<RocketWeaponManager>();
         health = GetComponent<Health>();
         energy = GetComponent<Energy>();
@@ -216,8 +214,7 @@ public class PlayerManager : NetworkBehaviour
         damageEffect.Stop();
         AudioManager.instance.Play("Explosion");    //TODO: This should not be played on the AudioManager but from the Rocket itself to enable 3D sound
 
-        // Disable all movement and weapon input. No moving or shooting if you are dead!
-        engine.Stop();
+        // Disable weapon input. No shooting if you are dead!
         weaponMgmt.Disable();
     }
 
