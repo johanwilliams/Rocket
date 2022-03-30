@@ -218,44 +218,36 @@ public class PlayerManager : NetworkBehaviour
         gameObject.transform.rotation = spawnPosition.rotation;
         ToggleCollider(true);
 
+        // Play the respawn effect
+        RpcRespawnPlayEfx();
 
         // Wait and then play the spawn effect
         yield return new WaitForSeconds(respawnDuration);
-        RpcRespawnAll();
+        RpcRespawnEnableRocket();
         health.Reset();
         energy.Reset();
-    } 
+    }
 
     /// <summary>
-    /// Target RPC call on the player that died. Respawns by moving the transform to the new spawn point (player
-    /// is invisible). Also enables the colliders so the rocket won't fall through the ground (but it is still
-    /// invisible)
+    /// Client RPC call executed on all clients. Plays the spawn effect.
     /// </summary>
-    /// <param name="position">Position of the new spwan point</param>
-    /// <param name="rotation">Rotation of the new spawn point</param>
-    [TargetRpc]
-    private void RpcRespawnTarget(Vector2 position, Quaternion rotation)
+    [ClientRpc]
+    private void RpcRespawnPlayEfx()
     {
-        Debug.Log($"Client: {transform.name} respawning");
-
-        gameObject.transform.position = position;
-        gameObject.transform.rotation = rotation;
-        ToggleCollider(true);        
+        respawnEffect.Play();
     }
 
     /// <summary>
     /// Client RPC call executed on all clients. Will enable all disabled components again (i.e.
     /// make the rocket visible again) and also reactivate the colliders.
-    /// Also plays the spawn effect.
     /// </summary>
     [ClientRpc]
-    private void RpcRespawnAll()
+    private void RpcRespawnEnableRocket()
     {
         Debug.Log($"Client: {transform.name} enabling components and spawn effect");
         // Unhide the rocket and turn on the collider        
         ToggleVisibility(true);
         ToggleCollider(true);
-        respawnEffect.Play();
     }
 
     /// <summary>

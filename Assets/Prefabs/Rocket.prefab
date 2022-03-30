@@ -5189,7 +5189,7 @@ MonoBehaviour:
   magnitudeThreshold: 50
   damageModifier: 0.1
   deathDuration: 3
-  respawnDuration: 2
+  respawnDuration: 1.5
   deathEffect: {fileID: 8923641824933876956}
   respawnEffect: {fileID: 7300819505853693857}
   damageEffect: {fileID: 5719648048987868067}
@@ -5267,13 +5267,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  rotationForce: 150
-  thrustForce: 200
-  boostModifier: 1.5
+  rotationForceMultiplayer: 150
+  thrusterForceMultiplier: 200
+  boostMultiplier: 1.5
   boostEnergyCost: 20
   thrusterFlame: {fileID: 1151594003703057466}
   thrusterBoostFlame: {fileID: 6699938878357441269}
-  rotationValue: 0
 --- !u!114 &-1620726425180420212
 MonoBehaviour:
   m_ObjectHideFlags: 0
