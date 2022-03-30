@@ -59,12 +59,13 @@ public class PlayerManager : NetworkBehaviour
         {
             health.OnDeath += Die;
         }
-
-        // Activate the camera follow on the local player
+        
         if (isLocalPlayer)
         {
+            // Activate the camera follow on the local player
             SetCameraFollow();
             
+            // Init health and energy bars on the UI
             healthbar = GameObject.FindObjectOfType<Healthbar>();
             healthbar.SetMaxHealth(health.maxHealth);
 
@@ -128,10 +129,36 @@ public class PlayerManager : NetworkBehaviour
         }
     }
 
+    #region Health and Energy
+
+    /// <summary>
+    /// Server command to apply damage to a rocket
+    /// </summary>
+    /// <param name="damage">Damage amount</param>
+    [Command]
+    private void CmdTakeDamage(float damage)
+    {
+        health.TakeDamage(damage);
+    }
+
     void OnHealthChanged(float oldHealth, float newHealth)
-    {        
+    {
+        UpdateDamageEfx(newHealth);
+
+        if (isLocalPlayer)
+        {
+            healthbar.SetHealth(newHealth);
+        }            
+    }
+
+    /// <summary>
+    /// Updates the damage effect of the rocket based on the current health
+    /// </summary>
+    /// <param name="newHealth">New health</param>
+    void UpdateDamageEfx(float newHealth)
+    {
         if (newHealth <= (health.maxHealth / 2f))
-        {     
+        {
             // When damaged over 50% increase the emission rate of the damage effect
             var ps = damageEffect.emission;
             ps.rateOverTime = Mathf.Max(0f, (health.maxHealth / 2f - newHealth) / (health.maxHealth / 20f));
@@ -141,12 +168,6 @@ public class PlayerManager : NetworkBehaviour
         }
         else if (newHealth > (health.maxHealth / 2f))
             damageEffect.Stop();
-
-        if (isLocalPlayer)
-        {
-            healthbar.SetHealth(newHealth);
-        }
-            
     }
 
     void OnEnergyChanged(float oldEnergy, float newEnergy)
@@ -157,6 +178,10 @@ public class PlayerManager : NetworkBehaviour
             energybar.SetEnergy(newEnergy);
         }
     }
+
+    #endregion
+
+    #region Death and Respawn
 
     /// <summary>
     /// Called on the server when we die. Will notify all clients of a rocket dying so they can spawn the death particle effect
@@ -282,19 +307,9 @@ public class PlayerManager : NetworkBehaviour
             //Debug.Log($"Collider {_col.name}: {enabled}");
             _col.enabled = enabled;
         }
-
-
     }
 
-    /// <summary>
-    /// Server command to apply damage to a rocket
-    /// </summary>
-    /// <param name="damage">Damage amount</param>
-    [Command]
-    private void CmdTakeDamage(float damage)
-    {
-        health.TakeDamage(damage);
-    }
+    #endregion
 
     #region Input
 
