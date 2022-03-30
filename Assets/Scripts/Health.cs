@@ -25,12 +25,17 @@ public class Health : NetworkBehaviour
     [SerializeField] 
     private bool destroyOnDeath = false;
 
-    // Delegates and Actions called when health changes and also when we die
+    // Delegates and Actions called when we take damage
     public delegate void DamageAction(float oldHealth, float newHealth);
     public event DamageAction OnDamage;
 
+    // Delegates and Actions called when we die
     public delegate void DiedAction();
     public event DiedAction OnDeath;
+
+    // Delegates and Actions called when we reset (respawn)
+    public delegate void ResetAction();
+    public event DiedAction OnReset;
 
     // Internal boolean to manage that we "only die once" when health reaches 0
     private bool dead = false;
@@ -80,6 +85,9 @@ public class Health : NetworkBehaviour
     {
         health = maxHealth;
         dead = false;
+
+        if (OnReset != null)
+            OnReset();
     }
 
     [Server]    

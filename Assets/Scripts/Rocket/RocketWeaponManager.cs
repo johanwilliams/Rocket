@@ -45,16 +45,25 @@ public class RocketWeaponManager : NetworkBehaviour
 
         prefabPoolManager = FindObjectOfType<PrefabPoolManager>();
 
+        // Subscribe to death and respawn actions
         health.OnDeath += Die;
+        health.OnReset += Reset;
 
-        if (isLocalPlayer)
-            CmdChangeEquippedWeapon(EquippedWeapon.lasergun);
+        Reset();
     }
     
 
     public void Die()
     {
         primaryActive = false;
+        if (isLocalPlayer)
+            CmdChangeEquippedWeapon(EquippedWeapon.nothing);
+    }
+
+    public void Reset()
+    {
+        if (isLocalPlayer)
+            CmdChangeEquippedWeapon(EquippedWeapon.lasergun);
     }
 
     private void Update()
