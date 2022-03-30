@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(RocketWeaponManager))]
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(Energy))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerManager : NetworkBehaviour
 {        
 
@@ -38,6 +39,7 @@ public class PlayerManager : NetworkBehaviour
     private RocketWeaponManager weaponMgmt;
     private Health health;
     private Energy energy;
+    private Rigidbody2D rb;
 
     #region MonoBehaviour api    
 
@@ -50,6 +52,7 @@ public class PlayerManager : NetworkBehaviour
         weaponMgmt = GetComponent<RocketWeaponManager>();
         health = GetComponent<Health>();
         energy = GetComponent<Energy>();
+        rb = GetComponent<Rigidbody2D>();
 
         health.OnDamage += OnHealthChanged;
         energy.OnChange += OnEnergyChanged;
@@ -235,10 +238,12 @@ public class PlayerManager : NetworkBehaviour
         Debug.Log($"Server: Waiting {respawnDuration} seconds to respawn {transform.name}");
         yield return new WaitForSeconds(deathDuration);
 
+        rb.velocity = new Vector2(0f, 0f);
+        rb.angularVelocity = 0f;
+
         // Get a new spawn point and send it to the target player
         Debug.Log($"Server: Respawning and moving {transform.name} and resetting health");
-        Transform spawnPosition = NetworkManager.startPositions[Random.Range(0, NetworkManager.startPositions.Count)];
-        //RpcRespawnTarget(spawnPosition.position, spawnPosition.rotation);
+        Transform spawnPosition = NetworkManager.startPositions[Random.Range(0, NetworkManager.startPositions.Count)];        
         gameObject.transform.position = spawnPosition.position;
         gameObject.transform.rotation = spawnPosition.rotation;
         ToggleCollider(true);

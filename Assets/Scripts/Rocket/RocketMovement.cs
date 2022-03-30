@@ -17,17 +17,17 @@ public class RocketMovement : NetworkBehaviour
     [SerializeField] [Range(0f, 3f)] private float boostMultiplier = 1.5f;
     [SerializeField] [Range(0f, 50f)] private float boostEnergyCost = 30f;
     [SerializeField] private ParticleSystem thrusterFlame;
-    [SerializeField] private ParticleSystem thrusterBoostFlame;
-
-    private Rigidbody2D rb;
+    [SerializeField] private ParticleSystem thrusterBoostFlame;    
 
     private float rotationValue;
     [SyncVar(hook = nameof(OnThrusterChanged))] private float thrusterValue;
     [SyncVar(hook = nameof(OnThrusterBoostChanged))] private bool thrusterBoost;
     
+    // Components
     private Health health;
     private Energy energy;
     private AudioSource thrusterSound;
+    private Rigidbody2D rb;
 
     private void Start()
     {
@@ -110,7 +110,7 @@ public class RocketMovement : NetworkBehaviour
 
     #endregion
 
-    #region Thruster updates    
+    #region Thruster, Boost and Rotation
 
     /// <summary>
     /// Server command that gets called from the local player when the input thuster value has changed.
@@ -183,12 +183,9 @@ public class RocketMovement : NetworkBehaviour
     /// <param name="newThrusterBoost">New thruster boost value</param>
     void OnThrusterBoostChanged(bool oldThrusterBoost, bool newThrusterBoost)
     {
-        // Starting to boost
         if (newThrusterBoost)
             thrusterBoostFlame.Play();
-
-        // Stopping boost
-        if (!newThrusterBoost)
+        else
             thrusterBoostFlame.Stop();
 
         UpdateThrusterPitchSound();
