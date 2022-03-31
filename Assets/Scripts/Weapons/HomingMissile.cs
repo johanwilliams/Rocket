@@ -110,7 +110,6 @@ public class HomingMissile : NetworkBehaviour
 
     private void Update()
     {
-
         if (dead)
             return;
 
@@ -135,10 +134,9 @@ public class HomingMissile : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        //if (!isServer)
-        //    return;
+        if (dead)
+            return;
 
-        // Thrust
         ThrustRocket();
 
         // Turn
