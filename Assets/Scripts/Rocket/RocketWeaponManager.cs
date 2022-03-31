@@ -113,7 +113,7 @@ public class RocketWeaponManager : NetworkBehaviour
     private void CmdSpawnHomingMissile()
     {
         Debug.Log("Spawning homing missile");
-        Vector2 spawnPosition = weaponMountPoint.transform.position + -primaryWeapon.firePoint.up * 50f;
+        Vector2 spawnPosition = weaponMountPoint.transform.position + -weaponMountPoint.transform.up * 50f;        
         GameObject projectile = Instantiate(homingMissilePrefab, spawnPosition, weaponMountPoint.transform.rotation);
         NetworkServer.Spawn(projectile);
     }
