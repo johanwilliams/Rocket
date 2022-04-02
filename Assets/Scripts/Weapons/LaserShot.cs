@@ -52,7 +52,7 @@ public class LaserShot : NetworkBehaviour
         if (!isServer)
             return;
 
-        Debug.Log($"Lasershot hitting {collider.gameObject.name}");
+        this.Log($"Lasershot hitting {collider.gameObject.name}");
         
         // See if we hit something with health
         GameObject go = collider.gameObject;
@@ -63,7 +63,7 @@ public class LaserShot : NetworkBehaviour
             NetworkIdentity networkIdentity = go.GetComponent<NetworkIdentity>();
             if (networkIdentity != null && networkIdentity.netId == shooter)
             {
-                Debug.Log($"Colliding with own gameObject - Ignoring...");
+                this.Log($"Colliding with own gameObject - Ignoring...");
                 return;
             }
             health.TakeDamage(damage);

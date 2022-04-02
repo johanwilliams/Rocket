@@ -42,7 +42,7 @@ public class PrefabPoolManager : MonoBehaviour
     {
         if (currentCount > maxSize)
         {
-            Debug.LogError($"Pool has reached max size of {maxSize}");
+            this.LogError($"Pool has reached max size of {maxSize}");
             return null;
         }
 

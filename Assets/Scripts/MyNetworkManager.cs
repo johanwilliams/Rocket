@@ -11,7 +11,7 @@ public class MyNetworkManager : NetworkManager
         base.Start();
  
         if (Application.isBatchMode) {
-            Debug.Log("Batch mode detected, starting server...");
+            this.Log("Batch mode detected, starting server...");
             NetworkManager.singleton.StartServer();
         }
     }
@@ -28,7 +28,7 @@ public class MyNetworkManager : NetworkManager
     public override void OnServerReady(NetworkConnection conn)
     {
         base.OnServerReady(conn);
-        Debug.Log($"Client {conn.connectionId} is ready");
+        this.Log($"Client {conn.connectionId} is ready");
     }
 
     /// <summary>
@@ -39,7 +39,7 @@ public class MyNetworkManager : NetworkManager
     public override void OnServerDisconnect(NetworkConnection conn)
     {        
         base.OnServerDisconnect(conn);
-        Debug.Log($"Client {conn.connectionId} disconnected");
+        this.Log($"Client {conn.connectionId} disconnected");
     }
 
     #endregion
@@ -53,7 +53,7 @@ public class MyNetworkManager : NetworkManager
     public override void OnClientConnect()
     {
         base.OnClientConnect();
-        Debug.Log("Connected to the server!");
+        this.Log("Connected to the server!");
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public class MyNetworkManager : NetworkManager
     public override void OnClientDisconnect()
     {        
         base.OnClientDisconnect();
-        Debug.Log("Disconnected from the server!");
+        this.Log("Disconnected from the server!");
     }
 
     #endregion
@@ -76,7 +76,7 @@ public class MyNetworkManager : NetworkManager
     /// </summary>
     public override void OnStartServer()
     {
-        Debug.Log("Server started!");
+        this.Log("Server started!");
     }
 
     /// <summary>
@@ -84,7 +84,7 @@ public class MyNetworkManager : NetworkManager
     /// </summary>
     public override void OnStartClient()
     {
-        Debug.Log("Client started!");
+        this.Log("Client started!");
     }
 
     /// <summary>
@@ -92,7 +92,7 @@ public class MyNetworkManager : NetworkManager
     /// </summary>
     public override void OnStopServer()
     {
-        Debug.Log("Server stopped!");
+        this.Log("Server stopped!");
     }
 
     /// <summary>
@@ -100,7 +100,7 @@ public class MyNetworkManager : NetworkManager
     /// </summary>
     public override void OnStopClient()
     {
-        Debug.Log("Client stopped!");
+        this.Log("Client stopped!");
     }
 
     #endregion

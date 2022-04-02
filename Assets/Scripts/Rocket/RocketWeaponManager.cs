@@ -70,7 +70,7 @@ public class RocketWeaponManager : NetworkBehaviour
     {
         if (isLocalPlayer && primaryActive && primaryWeapon != null && primaryWeapon.CanShoot() && energy.CanConsume(primaryWeapon.energyCost))
         {
-            Debug.Log($"Client {netId} shooting with {primaryWeapon.displayName}!");
+            this.Log($"Client {netId} shooting with {primaryWeapon.displayName}!");
             primaryWeapon.Shoot();
             
             CmdShoot(netId, primaryWeapon.firePoint.transform.position, weaponMountPoint.transform.rotation);
@@ -83,7 +83,7 @@ public class RocketWeaponManager : NetworkBehaviour
     [Command]
     private void CmdShoot(uint shooterNetId, Vector2 _position, Quaternion _rotation)
     {
-        Debug.Log($"Server: Client {shooterNetId} is shooting");
+        this.Log($"Server: Client {shooterNetId} is shooting");
 
         //TODO: We should check if we can shoot here as well (laserGun.CanShoot(NetworkTime.time) to avoid cheat but not working even using NetworkTime.time
         if (energy.CanConsume(primaryWeapon.energyCost)) {
@@ -100,7 +100,7 @@ public class RocketWeaponManager : NetworkBehaviour
             RpcShoot();            
         }
         else
-            Debug.Log($"Server: Client {shooterNetId} is not allowed to shoot");
+            this.Log($"Server: Client {shooterNetId} is not allowed to shoot");
     }
 
     [ClientRpc]
@@ -112,7 +112,7 @@ public class RocketWeaponManager : NetworkBehaviour
     [Command]
     private void CmdSpawnHomingMissile()
     {
-        Debug.Log("Spawning homing missile");
+        this.Log("Spawning homing missile");
         Vector2 spawnPosition = weaponMountPoint.transform.position + -weaponMountPoint.transform.up * 50f;        
         GameObject projectile = Instantiate(homingMissilePrefab, spawnPosition, weaponMountPoint.transform.rotation);
         NetworkServer.Spawn(projectile);

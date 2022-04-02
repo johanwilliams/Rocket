@@ -23,11 +23,11 @@ public abstract class Weapon : MonoBehaviour
     protected virtual void Start()
     {
         if (shotPrefab == null)
-            Debug.LogError($"No shot prefab defined for weapon {displayName}");
+            this.LogError($"No shot prefab defined for weapon {displayName}");
 
         weaponSound = GetComponent<AudioSource>();
         if (weaponSound == null)
-            Debug.LogWarning($"No weaponsound defined for weapon {displayName}");
+            this.LogWarning($"No weaponsound defined for weapon {displayName}");
     }
 
     public virtual bool CanShoot()

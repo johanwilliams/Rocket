@@ -99,7 +99,7 @@ public class Health : NetworkBehaviour
     {
         regenTimer = 0f;
         health = Mathf.Clamp(health - damage, 0, maxHealth);
-        Debug.Log($"{gameObject.name} took {damage} damage and now has a health of {health}");
+        this.Log($"{gameObject.name} took {damage} damage and now has a health of {health}");
     }        
 
     void OnHealthChanged(float oldHealth, float newHealth)
@@ -113,7 +113,7 @@ public class Health : NetworkBehaviour
     [Command]
     private void CmdDie()
     {
-        Debug.Log($"{gameObject.name} died!");
+        this.Log($"{gameObject.name} died!");
         NetworkServer.Destroy(gameObject);
     }
 }

@@ -45,7 +45,7 @@ public class PlayerManager : NetworkBehaviour
     /// Set up the references to the components we need
     /// </summary>
     void Start()
-    {        
+    {
         health = GetComponent<Health>();
         energy = GetComponent<Energy>();
         rb = GetComponent<Rigidbody2D>();
@@ -93,12 +93,12 @@ public class PlayerManager : NetworkBehaviour
     {        
         if (isLocal)
         {
-            Debug.Log("Setting player layer: LOCAL");
+            this.Log("Setting player layer: LOCAL");
             gameObject.layer = LayerMask.NameToLayer(layerPlayerLocal);
         }            
         else
         {
-            Debug.Log("Setting player layer: REMOTE");
+            this.Log("Setting player layer: REMOTE");
             gameObject.layer = LayerMask.NameToLayer(layerPlayerRemote);
         }
             
@@ -201,7 +201,7 @@ public class PlayerManager : NetworkBehaviour
     [ClientRpc]
     private void RpcDieAndDisable()
     {
-        Debug.Log($"Client: {transform.name} died!");
+        this.Log($"Client: {transform.name} died!");
 
         // Hide the rocket and turn off the collider
         ToggleVisibility(false);
@@ -227,14 +227,14 @@ public class PlayerManager : NetworkBehaviour
     IEnumerator Respawn()
     {
         // Wait for the death effect to play
-        Debug.Log($"Server: Waiting {respawnDuration} seconds to respawn {transform.name}");
+        this.Log($"Server: Waiting {respawnDuration} seconds to respawn {transform.name}");
         yield return new WaitForSeconds(deathDuration);
 
         rb.velocity = new Vector2(0f, 0f);
         rb.angularVelocity = 0f;
 
         // Get a new spawn point and send it to the target player
-        Debug.Log($"Server: Respawning and moving {transform.name} and resetting health");
+        this.Log($"Server: Respawning and moving {transform.name} and resetting health");
         Transform spawnPosition = NetworkManager.startPositions[Random.Range(0, NetworkManager.startPositions.Count)];        
         gameObject.transform.position = spawnPosition.position;
         gameObject.transform.rotation = spawnPosition.rotation;
@@ -266,7 +266,7 @@ public class PlayerManager : NetworkBehaviour
     [ClientRpc]
     private void RpcRespawnEnableRocket()
     {
-        Debug.Log($"Client: {transform.name} enabling components and spawn effect");
+        this.Log($"Client: {transform.name} enabling components and spawn effect");
         // Unhide the rocket and turn on the collider        
         ToggleVisibility(true);
         ToggleCollider(true);
@@ -301,7 +301,7 @@ public class PlayerManager : NetworkBehaviour
         Collider2D _col = GetComponent<Collider2D>();
         if (_col != null)
         {
-            //Debug.Log($"Collider {_col.name}: {enabled}");
+            //this.Log($"Collider {_col.name}: {enabled}");
             _col.enabled = enabled;
         }
     }
@@ -314,7 +314,7 @@ public class PlayerManager : NetworkBehaviour
     {
         if (context.performed)
         {
-            Debug.Log("Self destruct");
+            this.Log("Self destruct");
             CmdTakeDamage(health.maxHealth);
         }
     }
@@ -323,7 +323,7 @@ public class PlayerManager : NetworkBehaviour
     {
         if (context.performed)
         {
-            Debug.Log($"Take {health.maxHealth / 10f} damage");
+            this.Log($"Take {health.maxHealth / 10f} damage");
             CmdTakeDamage(health.maxHealth / 10f);
         }
     }    

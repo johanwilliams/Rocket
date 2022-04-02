@@ -71,7 +71,7 @@ public class Energy : NetworkBehaviour
     {
         regenTimer = 0f;
         energy = Mathf.Clamp(energy - energyCost, 0, maxEnergy);
-        Debug.Log($"{gameObject.name} consumed {energyCost} energy and how has {energy} energy left");
+        this.Log($"{gameObject.name} consumed {energyCost} energy and how has {energy} energy left");
     }        
 
     void OnEnergyChanged(float oldEnergy, float newEnergy)
